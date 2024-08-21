@@ -1,0 +1,170 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des emails</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="false"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body fluid">
+                <app-data-table
+                    [stateKey]="'product-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                    [rows]="appConfig.rows"
+                    [rowsPerPageOptions]="appConfig.rowsPerPageOptions"
+                    [showCurrentPageReport]="true"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails email</strong>
+                        </h4>
+                    </div>
+
+                    <div class="p-toolbar-group-right">
+                        <p-button
+                            *ngIf="selectedData.emailStatus === 'FAILURE'"
+                            label="Renvoyer"
+                            styleClass="p-button-info mr-1"
+                            icon="fas fa-reply fa-lg"
+                            (click)="resendEmail()"
+                        >
+                        </p-button>
+                        <app-menu-detail
+                            [types]="''"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel header="Email">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'fromEmail'"
+                                [label]="'Expéditeur'"
+                                [value]="f.fromEmail"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'fromName'"
+                                [label]="'Envoyé par'"
+                                [value]="f.fromName"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'toEmail'"
+                                [label]="'Destinataire'"
+                                [value]="f.toEmail"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'cc'"
+                                [label]="'Personne en copie'"
+                                [value]="f.cc"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'subject'"
+                                [label]="'Objet'"
+                                [value]="f.subject"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-input-date-time
+                                [formGroup]="formGroup"
+                                [name]="'date'"
+                                [label]="'Date d\'envoi'"
+                                [value]="f.date"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-date-time>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'causeOfFailure'"
+                                [label]="'Cause d\'echec'"
+                                [value]="f.causeOfFailure"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'emailStatus'"
+                                [label]="'Statut'"
+                                [dataKey]="''"
+                                [placeholder]="'Indéfini'"
+                                [value]="f.emailStatus"
+                                [values]="email_type_list"
+                                [displayField]="'label'"
+                                [returnValue]="'code'"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-select-form>
+                        </p-tabPanel>
+                        <p-tabPanel header="Body">
+                            <div [innerHTML]="emailBody"></div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

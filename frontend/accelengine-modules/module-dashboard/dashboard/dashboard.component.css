@@ -1,0 +1,25 @@
+.row{
+    margin-left: 0px; 
+    margin-right: 0px; 
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.text-warning {
+    color: #00cc99!important;
+}
+.text-warning-d {
+    color: #cc0033!important;
+
+}
+.text-warning-N {
+    color: #e0de56!important;
+
+}
+
+.bg-success {
+    background-color: #00cc99!important;
+}
+.bg-danger {
+    background-color: #cc0033!important;
+}

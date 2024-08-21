@@ -1,0 +1,78 @@
+<div class="grid">
+    <div class="col-12">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Dashboard</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <button
+                            *ngIf="displayExportExcel()"
+                            type="button"
+                            pButton
+                            pRipple
+                            icon="fa-regular fa-file-excel"
+                            (click)="exportExcel()"
+                            class="p-button-success mr-2"
+                            pTooltip="XLS"
+                            tooltipPosition="bottom"
+                        ></button>
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="false"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="initData()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div id="main-view" class="main-body p-fluid grid-main-body">
+                <div class="grid" *ngIf="selectedData.period">
+                    <div class="col-6">
+                        <app-date-form
+                            [formGroup]="formGroup"
+                            [name]="'beginDate'"
+                            [label]="'Date début'"
+                            [value]="f.beginDate"
+                            [isSubmitted]="isSubmitted"
+                            (onChange)="onChangeDate($event)"
+                        >
+                        </app-date-form>
+                    </div>
+                    <div class="col-6">
+                        <app-date-form
+                            [formGroup]="formGroup"
+                            [name]="'endDate'"
+                            [label]="'Date fin'"
+                            [value]="f.endDate"
+                            [isSubmitted]="isSubmitted"
+                            (onChange)="onChangeDate($event)"
+                        >
+                        </app-date-form>
+                    </div>
+                </div>
+                <div class="grid" *ngFor="let row of selectedData.rows">
+                    <div
+                        *ngFor="let col of row.columns"
+                        class="col-{{ col.width }}"
+                        [style.height.px]="row.calculatedHeight"
+                        [style.overflow]="'overlay'"
+                    >
+                        <app-widget-view
+                            *ngIf="col.widget"
+                            [load]="true"
+                            [widget]="col.widget"
+                            [filters]="filters"
+                        >
+                        </app-widget-view>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>

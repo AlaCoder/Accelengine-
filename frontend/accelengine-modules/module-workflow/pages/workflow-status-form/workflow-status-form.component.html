@@ -1,0 +1,66 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-input-form
+            [formGroup]="formGroup"
+            [name]="'code'"
+            [label]="'Code'"
+            [value]="f.code"
+            [isSubmitted]="isSubmitted"
+            [isDisabled]="data.id && data.id > 0"
+        >
+        </app-input-form>
+        <app-input-form
+            [formGroup]="formGroup"
+            [name]="'label'"
+            [label]="'Label'"
+            [value]="f.label"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-input-form>
+        <app-number-form
+            [formGroup]="formGroup"
+            [name]="'statusOrder'"
+            [label]="'Ordre'"
+            [value]="f.statusOrder"
+            [min]="0"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-number-form>
+        <app-color-form
+            [formGroup]="formGroup"
+            [name]="'color'"
+            [label]="'Couleur'"
+            [value]="f.color"
+            [colors]="colors"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-color-form>
+        <app-input-mask
+            [formGroup]="formGroup"
+            [name]="'estimation'"
+            [label]="'Estimation'"
+            [value]="f.estimation"
+            [placeholder]="'JJ-HH-MM'"
+            [isSubmitted]="isSubmitted"
+            [mask]="'99-99-99'"
+            [help]="'Jours-Heures-Minutes'"
+        >
+        </app-input-mask>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

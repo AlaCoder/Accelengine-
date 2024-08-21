@@ -1,0 +1,197 @@
+<h5>Threads</h5>
+<span>Runnable ({{ threadStats.threadDumpRunnable }})</span>
+<p-progressBar
+    [value]="round(threadStats.threadDumpRunnable)"
+    class="progressbar-success"
+>
+    <span
+        >{{
+            (threadStats.threadDumpRunnable * 100) / threadStats.threadDumpAll
+                | number: "1.0-0"
+        }}%</span
+    >
+</p-progressBar>
+<br />
+
+<span>Timed Waiting ({{ threadStats.threadDumpTimedWaiting }})</span>
+<p-progressBar
+    [value]="round(threadStats.threadDumpTimedWaiting)"
+    class="progressbar-warning"
+>
+    <span
+        >{{
+            (threadStats.threadDumpTimedWaiting * 100) /
+                threadStats.threadDumpAll | number: "1.0-0"
+        }}%</span
+    >
+</p-progressBar>
+<br />
+
+<span>Waiting ({{ threadStats.threadDumpWaiting }})</span>
+<p-progressBar
+    [value]="round(threadStats.threadDumpWaiting)"
+    class="progressbar-warning"
+>
+    <span
+        >{{
+            (threadStats.threadDumpWaiting * 100) / threadStats.threadDumpAll
+                | number: "1.0-0"
+        }}%</span
+    >
+</p-progressBar>
+<br />
+
+<span>Blocked ({{ threadStats.threadDumpBlocked }})</span>
+<br />
+<p-progressBar
+    [value]="round(threadStats.threadDumpBlocked)"
+    class="progressbar-success"
+>
+    <span
+        >{{
+            (threadStats.threadDumpBlocked * 100) / threadStats.threadDumpAll
+                | number: "1.0-0"
+        }}%</span
+    >
+</p-progressBar>
+<br />
+
+<div>Total: {{ threadStats.threadDumpAll }}</div>
+<br />
+
+<button
+    pButton
+    pRipple
+    label="Details"
+    (click)="open()"
+></button>
+
+<p-dialog
+    header="Threads dump"
+    [(visible)]="display"
+    styleClass="threads-dialog"
+>
+    <table style="width: 100%">
+        <tbody>
+            <tr>
+                <td>
+                    <span (click)="threadStateFilter = undefined">
+                        <i
+                            *ngIf="threadStateFilter === undefined"
+                            class="fas fa-check"
+                        ></i>
+                        All
+                        <span class="badge badge-pill badge-default">{{
+                            threadDumpAll
+                        }}</span>
+                    </span>
+                </td>
+                <td>
+                    <span (click)="threadStateFilter = ThreadState.Runnable">
+                        <i
+                            *ngIf="threadStateFilter === ThreadState.Runnable"
+                            class="fas fa-check"
+                        ></i>
+                        Runnable
+                        <span class="badge badge-pill badge-default">{{
+                            threadDumpRunnable
+                        }}</span>
+                    </span>
+                </td>
+                <td>
+                    <span (click)="threadStateFilter = ThreadState.Waiting">
+                        <i
+                            *ngIf="threadStateFilter === ThreadState.Waiting"
+                            class="fas fa-check"
+                        ></i>
+                        Waiting
+                        <span class="badge badge-pill badge-default">{{
+                            threadDumpWaiting
+                        }}</span>
+                    </span>
+                </td>
+                <td>
+                    <span
+                        (click)="threadStateFilter = ThreadState.TimedWaiting"
+                    >
+                        <i
+                            *ngIf="
+                                threadStateFilter === ThreadState.TimedWaiting
+                            "
+                            class="fas fa-check"
+                        ></i>
+                        Timed Waiting
+                        <span class="badge badge-pill badge-default">{{
+                            threadDumpTimedWaiting
+                        }}</span>
+                    </span>
+                </td>
+                <td></td>
+                <span (click)="threadStateFilter = ThreadState.Blocked">
+                    <i
+                        *ngIf="threadStateFilter === ThreadState.Blocked"
+                        class="fas fa-check"
+                    ></i>
+                    Blocked
+                    <span class="badge badge-pill badge-default">{{
+                        threadDumpBlocked
+                    }}</span>
+                </span>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+
+    <div *ngFor="let thread of getThreads()">
+        <b>
+            {{ thread.threadState }}
+            ID : {{ thread.threadId }} - {{ thread.threadName }}
+            <a
+                (click)="thread.showThreadDump = !thread.showThreadDump"
+                href="javascript:void(0);"
+            >
+                <span [hidden]="thread.showThreadDump">Show StackTrace</span>
+                <span [hidden]="!thread.showThreadDump">Hide StackTrace</span>
+            </a>
+        </b>
+
+        <div class="card" [hidden]="!thread.showThreadDump">
+            <div class="card-body">
+                <div *ngFor="let st of thread.stackTrace" class="break">
+                    <samp
+                        >{{ st.className }}.{{ st.methodName }}(<code
+                            >{{ st.fileName }}:{{ st.lineNumber }}</code
+                        >)</samp
+                    >
+                    <span class="mt-1"></span>
+                </div>
+            </div>
+        </div>
+
+        <table style="width: 100%">
+            <thead>
+                <tr>
+                    <th class="text-left" style="width: 100px">Blocked Time</th>
+                    <th class="text-left" style="width: 100px">
+                        Blocked Count
+                    </th>
+                    <th class="text-left" style="width: 100px">Waited Time</th>
+                    <th class="text-left" style="width: 100px">Waited Count</th>
+                    <th class="text-left">Lock Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">{{ thread.blockedTime }}</td>
+                    <td class="text-left">{{ thread.blockedCount }}</td>
+                    <td class="text-left">{{ thread.waitedTime }}</td>
+                    <td class="text-left">{{ thread.waitedCount }}</td>
+                    <td class="text-left">
+                        <code>{{ thread.lockName }}</code>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+    </div>
+</p-dialog>

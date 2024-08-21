@@ -1,0 +1,77 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des objets</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right"></div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="objectsWorkflow"
+                    [export]="false"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Management des statuts </strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="'e'"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-management-status
+                    [formGroup]="formGroup"
+                    [classObject]="code"
+                    [currentObject]="selectedData"
+                    [isEdit]="isEdit"
+                    [isSubmitted]="isSubmitted"
+                    (newStatusEvent)="receptionOfNewStatus($event)"
+                >
+                </app-management-status>
+                <app-data-table
+                    [columns]="columnsHistory"
+                    [value]="valueHistory"
+                    (onButtonClickEvent)="onButtonClickEvent($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+</div>

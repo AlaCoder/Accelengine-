@@ -1,0 +1,71 @@
+<div class="form p-fluid">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <div *ngIf="isDisabled" class="p-inputgroup">
+                <input
+                    pInputText
+                    type="text"
+                    id="{{ name }}"
+                    name="{{ name }}"
+                    [value]="getValue(value)"
+                    [ngClass]="{
+                        'ng-dirty ng-invalid': isSubmitted && getErrors()
+                    }"
+                    disabled="true"
+                    placeholder="{{ placeholder | translate }}"
+                />
+            </div>
+            <div *ngIf="!isDisabled" class="p-inputgroup">
+                <p-autoComplete
+                    #autoComplete
+                    [suggestions]="suggestions"
+                    [field]="displayField"
+                    [(ngModel)]="entredValue"
+                    (completeMethod)="search($event)"
+                    id="{{ name }}"
+                    name="{{ name }}"
+                    class="form-control"
+                    styleClass="w-full"
+                    [ngClass]="{
+                        'ng-dirty ng-invalid': isSubmitted && getErrors()
+                    }"
+                    placeholder="{{ placeholder | translate }}"
+                    [disabled]="isDisabled ? '' : null"
+                    [emptyMessage]="emptyMessage"
+                    [minLength]="minLength"
+                    [appendTo]="'body'"
+                    (onSelect)="onSelect($event)"
+                    (onKeyUp)="onKeyUp($event)"
+                >
+                </p-autoComplete>
+                <button
+                    (click)="reset(true)"
+                    class="p-inputgroup-addon"
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-times"
+                ></button>
+            </div>
+            <small>{{ help }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

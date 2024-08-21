@@ -1,0 +1,15 @@
+.chart_container{
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+:host ::ng-deep .operator1 {
+    background-color: #3ebaf8;
+    color: white;
+}
+
+:host ::ng-deep .myTest2 {
+    background-color: #4c0f8d;
+    color: white;
+}

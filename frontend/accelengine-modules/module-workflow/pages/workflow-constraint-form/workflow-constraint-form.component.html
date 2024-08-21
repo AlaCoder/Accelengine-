@@ -1,0 +1,88 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'filed'"
+            [label]="'Choisir attribut'"
+            placeholder="Choisir attribut"
+            [value]="f.filed"
+            [dataKey]="''"
+            [values]="fileds"
+            [displayField]="'name'"
+            [returnValue]="''"
+            [isSubmitted]="isSubmitted"
+            (onChange)="onFiledChange($event)"
+        >
+        </app-select-form>
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'operation'"
+            [label]="'Operation'"
+            [placeholder]="'Sélectionner une Opération'"
+            [values]="operations"
+            [value]="f.operation"
+            [displayField]="'name'"
+            [dataKey]="''"
+            [returnValue]="'code'"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-select-form>
+        <app-input-form
+            *ngIf="!valueDateBol"
+            [formGroup]="formGroup"
+            [name]="'value'"
+            [label]="'Valeur'"
+            [value]="f.value"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-input-form>
+        <app-input-date-time
+            *ngIf="valueDateBol"
+            [formGroup]="formGroup"
+            [name]="'valueDate'"
+            [label]="'Valeur date'"
+            [value]="f.valueDate"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-input-date-time>
+        <app-number-form
+            [formGroup]="formGroup"
+            [name]="'constraintOrder'"
+            [label]="'Ordre'"
+            [placeholder]="'ordre'"
+            [value]="f.constraintOrder"
+            [isSubmitted]="isSubmitted"
+            [maxlength]="2"
+        >
+        </app-number-form>
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'operator'"
+            [label]="'opérateur'"
+            [placeholder]="'Sélectionner un opérateur'"
+            [values]="operators"
+            [value]="f.operator"
+            [displayField]="'name'"
+            [dataKey]="''"
+            [returnValue]="'code'"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-select-form>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

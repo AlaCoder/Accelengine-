@@ -1,0 +1,63 @@
+version: '3'
+
+networks:
+   net_pfe:
+     driver: bridge
+
+#Define services
+services:
+
+  #PostgreSQL Database for the application
+  postgrespfe:
+    image: "postgres:12-alpine"
+    container_name: postgres-pfe
+    networks:
+      - net_pfe
+    #Volume mounted for database for the storage
+    volumes:
+      - datapfe:/var/lib/postgresql/data
+    ports:
+      - 5438:5432 # Forward the exposed port 5432 on the container to port 5432 on the host machine
+    #Environment variable for DB name, user and password
+    environment:
+      - POSTGRES_DB=pfe
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin123
+    restart: on-failure
+
+  #Back-end Spring Boot Application
+  backpfe:
+    #The docker file in scrum-app build the jar and provides the docker image with the following name.
+    build: ./backend
+    container_name: back-pfe
+    networks:
+      - net_pfe
+    #Environment variables for Spring Boot Application.
+    environment:
+        - SPRING_PROFILES_ACTIVE=prodDocker
+#        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pfe
+#        - SPRING_DATASOURCE_USERNAME=postgres
+#        - SPRING_DATASOURCE_PASSWORD=admin123
+#        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+        - /data/DATA/pfe/:/DATA/
+    ports:
+      - 8088:8080 # Forward the exposed port 8080 on the container to port 8088 on the host machine
+    depends_on:
+      - postgrespfe
+    restart: on-failure
+
+  #Front-end Angular Application
+  frontpfe:
+    build: .
+    container_name: front-pfe
+    tty: true
+    ports:
+      - 4500:80
+    networks:
+      - net_pfe
+    restart: on-failure
+
+#Volumes for DB data
+volumes:
+    datapfe:

@@ -1,0 +1,3 @@
+language;codeModule;code;ui;message
+FR;START;test_msg;false;Le traitement {0} déclenché par {1} a commencé et peut prendre un peu de temps
+EN;START;test_msg;false;Process {0} triggered by {1} has started and may take a while

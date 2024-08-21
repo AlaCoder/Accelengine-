@@ -1,0 +1,28 @@
+<p-organizationChart
+    selectionMode="single"
+    *ngFor="let data of hierarchicData"
+    [value]="[data]"
+>
+    <ng-template let-node pTemplate="person" style="padding: 0; border: 0 none">
+        <div
+            style="color: #ffffff; padding: 0.5em 0.7rem"
+            [style.background-color]="
+                node.data.id === id ? '#ea5455' : '#1992D4'
+            "
+        >
+            {{ node.label }}
+        </div>
+        <div
+            style="
+                padding: 0.5em 0.7rem;
+                text-align: center;
+                border: 1px solid #1992d4;
+            "
+        >
+            <div>{{ node.data.name }}</div>
+        </div>
+    </ng-template>
+    <ng-template let-node pTemplate="department">
+        {{ node.label }}
+    </ng-template>
+</p-organizationChart>

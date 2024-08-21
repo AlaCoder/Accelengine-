@@ -1,0 +1,28 @@
+plugins {
+	id 'java-library'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+    archivesBaseName = 'module-constants'
+    project.version = '1.0.0'
+}
+
+dependencies {
+	// Spring
+
+ 	// Tools
+
+	// Lib
+
+}
+
+task buildModuleConstantsJar(type: Jar) {
+    group 'Accelengine'
+    description = 'Assembles a jar with all dependencies'
+    with jar
+}

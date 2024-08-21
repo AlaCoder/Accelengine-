@@ -1,0 +1,25 @@
+plugins {
+	id 'java-library'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+    archivesBaseName = 'module-start'
+    project.version = '2.2.0'
+}
+
+dependencies {
+    // Lib
+    //implementation project(':backend:accelengine-modules:module-workflow')
+    //implementation project(':backend:accelengine-modules:module-ged')
+}
+
+task buildModuleStartJar(type: Jar) {
+    group 'accelengine-modules'
+    description = 'Assembles a jar with all dependencies'
+    with jar
+}

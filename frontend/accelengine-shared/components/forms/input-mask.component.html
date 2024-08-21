@@ -1,0 +1,38 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <p-inputMask
+                formControlName="{{ name }}"
+                id="{{ name }}"
+                name="{{ name }}"
+                [ngClass]="{
+                    'ng-dirty ng-invalid': isSubmitted && getErrors()
+                }"
+                placeholder="{{ placeholder | translate }}"
+                [attr.disabled]="isDisabled ? '' : null"
+                [autocomplete]="autocomplete ? 'on' : 'off'"
+                [mask]="mask"
+                (ngModelChange)="onValueChange($event)"
+            ></p-inputMask>
+            <small>{{ help | translate }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

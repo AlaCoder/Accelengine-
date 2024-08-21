@@ -1,0 +1,29 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-file-form
+            [formGroup]="formGroup"
+            [name]="'file'"
+            [label]="'Choisir un fichier'"
+            [allowedType]="allowedType"
+            [value]="f.file"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-file-form>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

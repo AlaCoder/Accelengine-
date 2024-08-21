@@ -1,0 +1,14 @@
+<div class="main-body p-fluid" *ngIf="entity">
+    <div class="grid">
+        <div class="col-3">Date de création</div>
+        <div class="col-3">{{entity.createdDate | date: "dd/MM/yy HH:mm" }}</div>
+        <div class="col-3">Par l'utilisateur</div>
+        <div class="col-3">{{entity.createdBy}}</div>
+    </div>
+    <div class="grid">
+        <div class="col-3">Date de la dernière modification</div>
+        <div class="col-3">{{entity.lastModifiedDate | date: "dd/MM/yy HH:mm" }}</div>
+        <div class="col-3">Par l'utilisateur</div>
+        <div class="col-3">{{entity.lastModifiedBy}}</div>
+    </div>
+</div>

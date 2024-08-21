@@ -1,0 +1,53 @@
+<div class="grid">
+  <div class="col-12">
+    <p-card>
+      <ng-template pTemplate="header">
+        <p-toolbar>
+          <div class="p-toolbar-group-left">
+            <app-menu-bookmark></app-menu-bookmark>
+            <h4>
+              <strong>Télécharger les journaux</strong>
+            </h4>
+          </div>
+          <div class="p-toolbar-group-right"></div>
+        </p-toolbar>
+      </ng-template>
+      <div class="main-body p-fluid">
+        <p-toolbar>
+          <div class="p-toolbar-group-left"></div>
+          <div class="p-toolbar-group-right">
+              <button
+                  pButton
+                  pRipple
+                  label="Télécharger"
+                  icon="pi pi-download"
+                  [disabled]="!selectedNode"
+                  (click)="downloadFile()"
+              ></button>
+              <!-- <button
+                  pButton
+                  pRipple
+                  label="Supprimer"
+                  icon="pi pi-trash"
+                  [disabled]="!selectedNode"
+              ></button> -->
+          </div>
+      </p-toolbar>
+        <p-tabView>
+          <p-tabPanel *ngFor="let value of Values" [header]="value.label">
+           
+            <p-tree
+            [filter]="true"
+            [value]="value.nodes"
+            selectionMode="single"
+            [(selection)]="selectedNode"
+            (onNodeSelect)="nodeSelect($event)"
+            (onNodeUnselect)="nodeUnselect($event)"
+        ></p-tree>
+       
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </p-card>
+  </div>
+</div>

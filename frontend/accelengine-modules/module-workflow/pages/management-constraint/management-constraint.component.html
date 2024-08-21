@@ -1,0 +1,139 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des contraintes</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="datas"
+                    [export]="false"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails contrainte </strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel header="Contrainte">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'name'"
+                                [label]="'Nom'"
+                                [value]="f.name"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'document'"
+                                [label]="'Document'"
+                                [placeholder]="'Sélectionner un document'"
+                                [values]="documents"
+                                [value]="f.document"
+                                [displayField]="'code'"
+                                [dataKey]="''"
+                                [returnValue]="''"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                (onChange)="changeDocument($event)"
+                            >
+                            </app-select-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'failureStatus'"
+                                [label]="'Statut d\'échec'"
+                                [placeholder]="'Choisir'"
+                                [values]="workflowStatuses"
+                                [displayField]="'label'"
+                                [value]="f.failureStatus"
+                                [isDisabled]="!isEdit"
+                                [isSubmitted]="isSubmitted"
+                            >
+                            </app-select-form>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-align-justify pr-2"></i>
+                            <strong>Liste des opérations</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-crud
+                            [types]="'a,e,d'"
+                            [isAddDisabled]="!isEdit"
+                            [isEditDisabled]="!canDeleteCopyChild"
+                            [isDeleteDisabled]="!canDeleteCopyChild"
+                            (addClick)="onAddChildClick($event)"
+                            (editClick)="onEditChildClick($event)"
+                            (deleteClick)="onDeleteChildClick($event)"
+                        >
+                        </app-menu-crud>
+                    </div>
+                </p-toolbar>
+                <app-data-table
+                    [columns]="constraintColumns"
+                    [value]="constraints"
+                    [export]="false"
+                    [isDisabled]="!isEdit"
+                    [selectedData]="selectedChildData"
+                    (onSelectRow)="onSelectChildRow($event)"
+                    (onDblclickRow)="onDblclickChildRow($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+</div>

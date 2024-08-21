@@ -1,0 +1,36 @@
+# ===================================================================
+# Standard Spring Boot properties
+# ===================================================================
+spring:
+    profile: prodWindows
+    # Database
+    datasource:
+        platform: postgres
+        url: jdbc:postgresql://localhost:5432/pfe
+        username: postgres
+        password: admin123
+        driver-class-name: org.postgresql.Driver
+    # JPA properties
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        open-in-view: false
+        generate-ddl: false
+    liquibase:
+        enabled: true
+logging:
+    file:
+        path: C:\DATA\logs\${application.name}\prod
+        name: ${logging.file.path}\prod_app.log
+    pattern:
+        file: "%d %-5level [%thread] %logger{0} : %msg%n"
+    level:
+        org.springframework.web: WARN
+        guru.springframework.controllers: WARN
+        org.hibernate: WARN
+
+server:
+    port: 8080

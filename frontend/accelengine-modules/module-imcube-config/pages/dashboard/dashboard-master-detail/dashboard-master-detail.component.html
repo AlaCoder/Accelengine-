@@ -1,0 +1,323 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des dashboards</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails dashboard</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel>
+                            <ng-template pTemplate="header"
+                                ><span>Dashboard</span></ng-template
+                            >
+                            <div class="grid">
+                                <div class="col-4">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'code'"
+                                        [label]="'Nom'"
+                                        [value]="f.code"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                </div>
+                                <div class="col-8">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'description'"
+                                        [label]="'Description'"
+                                        [value]="f.description"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [col]="'2,10'"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div
+                                    id="main-view"
+                                    class="grid"
+                                    [style]="{
+                                        height: 'calc(100vh - 360px)'
+                                    }"
+                                >
+                                    <div
+                                        [attr.class]="
+                                            isEdit
+                                                ? 'col-10 grid-main-body'
+                                                : 'col-12 grid-main-body'
+                                        "
+                                    >
+                                        <div
+                                            class="grid"
+                                            *ngFor="
+                                                let row of selectedData.rows
+                                            "
+                                        >
+                                            <div
+                                                *ngFor="let col of row.columns"
+                                                class="col-{{ col.width }}"
+                                                [style.height.px]="
+                                                    row.calculatedHeight
+                                                "
+                                                [style.overflow]="'overlay'"
+                                            >
+                                                <p-card
+                                                    [dndDropzone]="['ALL']"
+                                                    (dndDrop)="
+                                                        dropWidget($event, col)
+                                                    "
+                                                >
+                                                    <app-widget-view
+                                                        *ngIf="col.widget"
+                                                        [load]="true"
+                                                        [widget]="col.widget"
+                                                    >
+                                                    </app-widget-view>
+
+                                                    <div
+                                                        *ngIf="!col.widget"
+                                                        class="flex align-content-center justify-content-center flex-wrap card-container"
+                                                        [style.min-height.px]="
+                                                            row.calculatedHeight -
+                                                            10
+                                                        "
+                                                    >
+                                                        <div
+                                                            class="flex align-items-center justify-content-center w-4rem h-4rem bg-gray-100 font-bold text-gray-900 border-round m-2"
+                                                        >
+                                                            Widget
+                                                        </div>
+                                                    </div>
+                                                </p-card>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        *ngIf="isEdit"
+                                        class="col-2 col-widget"
+                                    >
+                                        <div class="p-grid">
+                                            <button
+                                                pButton
+                                                type="button"
+                                                class="p-button mb-2"
+                                                label="Ajouter ligne"
+                                                iconPos="left"
+                                                style="width: 100%"
+                                                (click)="addRow()"
+                                            ></button>
+                                            <app-input-form
+                                                [formGroup]="formGroup"
+                                                [name]="'filter'"
+                                                [placeholder]="'Recherche'"
+                                                [value]="f.filter"
+                                                (onChange)="
+                                                    onFilterChanged($event)
+                                                "
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <div
+                                                *ngFor="
+                                                    let widget of filtredWidgets
+                                                "
+                                                class="pb-2"
+                                            >
+                                                <p-card
+                                                    [dndDraggable]="widget"
+                                                    [dndType]="'ALL'"
+                                                    (dndStart)="
+                                                        onDragStart(widget)
+                                                    "
+                                                >
+                                                    <span
+                                                        [ngSwitch]="
+                                                            widget.widgetType
+                                                        "
+                                                    >
+                                                        <i
+                                                            *ngSwitchCase="
+                                                                'PIVOTTABLE'
+                                                            "
+                                                            class="fa fas fa-table pr-2"
+                                                        ></i>
+
+                                                        <i
+                                                            *ngSwitchCase="
+                                                                'CHART'
+                                                            "
+                                                            class="fa fas fa-chart-line pr-2"
+                                                        ></i>
+                                                    </span>
+                                                    {{ widget.code }}
+                                                    <p>
+                                                        {{ widget.description }}
+                                                    </p>
+                                                </p-card>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                        <p-tabPanel>
+                            <ng-template pTemplate="header"
+                                ><span class="required"
+                                    >Roles</span
+                                ></ng-template
+                            >
+                            <app-selectable-data-table
+                                [columns]="columnsRoles"
+                                [value]="dataRoles"
+                                [(selectedData)]="selectedData.roles"
+                                (onSelectRow)="onSelectChildRow($event)"
+                                (onDblclickRow)="onDblclickChildRow($event)"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-selectable-data-table>
+                        </p-tabPanel>
+                        <p-tabPanel>
+                            <ng-template pTemplate="header"
+                                ><span>Filtres</span></ng-template
+                            >
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'period'"
+                                [label]="'Période'"
+                                [value]="f.period"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-switch-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'dateField'"
+                                [label]="'Champ Date'"
+                                [value]="f.dateField"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+<p-dialog
+    header="Ajouter une ligne"
+    [(visible)]="displayAddRow"
+    [style]="{ width: '50vw' }"
+>
+    <div class="col-12">
+        <div class="field grid">
+            <label class="col-3">Structure</label>
+            <div class="col-9">
+                <div class="p-fluid">
+                    <p-dropdown
+                        [options]="structures"
+                        [(ngModel)]="selectedStructure"
+                        optionLabel="label"
+                        optionValue="code"
+                        placeholder="Indéfini"
+                        appendTo="body"
+                    >
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="field grid">
+            <label class="col-3">Hauteur</label>
+            <div class="col-9">
+                <div class="p-fluid">
+                    <p-inputNumber
+                        [(ngModel)]="selectedHeight"
+                        [maxFractionDigits]="2"
+                        [minFractionDigits]="0"
+                        [min]="0"
+                        [max]="100"
+                        placeholder="0% => 100%"
+                        suffix="%"
+                    >
+                    </p-inputNumber>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Enregistrer"
+            (click)="closeAddRow()"
+            styleClass="p-button-text"
+        >
+        </p-button>
+    </ng-template>
+</p-dialog>

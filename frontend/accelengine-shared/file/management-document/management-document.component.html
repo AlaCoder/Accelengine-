@@ -1,0 +1,25 @@
+<p-toolbar>
+    <div class="p-toolbar-group-left">
+        <h4>
+            <i class="fa fa-align-justify pr-2"></i>
+            <strong>Documents</strong>
+        </h4>
+    </div>
+    <div class="p-toolbar-group-right">
+        <app-menu-crud
+            [types]="'a,d'"
+            (addClick)="onAddChildClick()"
+            [isAddDisabled]="isAddDisabled"
+            [isDeleteDisabled]="!canDeleteCopyChild"
+            (deleteClick)="onDeleteDocumentClick($event)"
+        >
+        </app-menu-crud>
+    </div>
+</p-toolbar>
+<app-data-table
+    [columns]="columnsChild"
+    [value]="documents"
+    [export]="false"
+    (onDblclickRow)="onDblclickChildRow($event)"
+    [selectedData]="selectedChildData"
+></app-data-table>

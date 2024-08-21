@@ -1,0 +1,88 @@
+<div class="form p-fluid">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <div class="p-inputgroup">
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-search"
+                    styleClass="p-button-warn"
+                    [disabled]="isDisabled"
+                    (click)="onSearchClick()"
+                ></button>
+                <input
+                    pInputText
+                    [(ngModel)]="valueFormControl"
+                    type="text"
+                    [ngClass]="{
+                        'ng-dirty ng-invalid': isSubmitted && getErrors()
+                    }"
+                    placeholder="{{ placeholder | translate }}"
+                    [attr.disabled]="true"
+                    [autocomplete]="autocomplete ? 'on' : 'off'"
+                />
+                <button
+                    type="button"
+                    pButton
+                    pRipple
+                    icon="pi pi-times"
+                    styleClass="p-button-warn"
+                    [disabled]="isDisabled || !valueFormControl"
+                    (click)="onResetClick()"
+                ></button>
+            </div>
+            <small>{{ help | translate }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    *ngIf="displayPopup"
+    header="Filtrer dans la base de données"
+    [(visible)]="displayPopup"
+    [modal]="true"
+    [style]="{ width: '95vw', height: '95vw' }"
+    [draggable]="false"
+    [resizable]="true"
+>
+    <div class="col-12">
+        <app-criteria
+            [storable]="false"
+            [data]="{ criterias: criteriasFields }"
+            (onSubmitClick)="onSubmitClick($event)"
+            (onCancelClick)="onCancelClick($event)"
+        ></app-criteria>
+    </div>
+    <div class="col-12">
+        <app-data-table
+            [stateKey]="'criteria-popup'"
+            [columns]="displayedColumns"
+            [value]="datas"
+            [paginator]="true"
+            [rows]="appConfig.rows"
+            [rowsPerPageOptions]="appConfig.rowsPerPageOptions"
+            (onPageChanged)="onPageChanged($event)"
+            (onDblclickRow)="onDblclickRow($event)"
+        >
+        </app-data-table>
+    </div>
+</p-dialog>

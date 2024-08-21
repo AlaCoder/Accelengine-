@@ -1,0 +1,146 @@
+<div class="grid">
+    <div class="col-12">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>{{
+                                "std.master_account" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [showResiz]="false"
+                            [types]="'e'"
+                            (editClick)="onEditClick()"
+                        ></app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h5>
+                                    {{
+                                        "std.title_Authentification" | translate
+                                    }}
+                                </h5>
+                                <div class="p-fluid">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'username'"
+                                        [label]="'Nom d\'utilisateur'"
+                                        [value]="f.username"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'email'"
+                                        [label]="'Email'"
+                                        [value]="f.email"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [type]="'password'"
+                                        [name]="'password'"
+                                        [label]="'Ancien mot de passe'"
+                                        [value]="f.password"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [type]="'password'"
+                                        [name]="'newPassword'"
+                                        [label]="'Nouveau mot de passe'"
+                                        [value]="f.newPassword"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [type]="'password'"
+                                        [name]="'confirmNewPassword'"
+                                        [label]="
+                                            'Confirmer le nouveau mot de passe'
+                                        "
+                                        [value]="f.confirmNewPassword"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h5>{{ "std.title_profile" | translate }}</h5>
+                                <div class="p-fluid">
+                                    <app-select-form
+                                        [formGroup]="formGroup.get('profile')"
+                                        [name]="'civility'"
+                                        [label]="'Civilité'"
+                                        [placeholder]="'Indéfini'"
+                                        [value]="f.profile.get('civility')"
+                                        [values]="civilitys"
+                                        [displayField]="'label'"
+                                        [returnValue]="'code'"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [filter]="false"
+                                    >
+                                    </app-select-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('profile')"
+                                        [name]="'firstname'"
+                                        [label]="'Prénom'"
+                                        [value]="f.firstname"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('profile')"
+                                        [name]="'lastname'"
+                                        [label]="'Nom'"
+                                        [value]="f.lastname"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+
+                                    <app-number-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'mainPhone'"
+                                        [label]="'Téléphone'"
+                                        [value]="
+                                            formGroup
+                                                .get('contact')
+                                                .get('mainPhone')
+                                        "
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [maxlength]="10"
+                                    >
+                                    </app-number-form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

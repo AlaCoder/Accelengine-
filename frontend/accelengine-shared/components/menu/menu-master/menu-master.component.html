@@ -1,0 +1,71 @@
+<span>
+    <span *ngIf="displayExport" class="p-buttonset pr-1">
+        <button
+            type="button"
+            pButton
+            pRipple
+            icon="fa-regular fa-file"
+            (click)="exportCSV()"
+            class="p-button-info"
+            pTooltip="CSV"
+            tooltipPosition="bottom"
+        ></button>
+        <button
+            type="button"
+            pButton
+            pRipple
+            icon="fa-regular fa-file-excel"
+            (click)="exportExcel()"
+            class="p-button-success"
+            pTooltip="XLS"
+            tooltipPosition="bottom"
+        ></button>
+        <button
+            type="button"
+            pButton
+            pRipple
+            icon="fa-regular fa-file-pdf"
+            (click)="exportPdf()"
+            class="p-button-warning"
+            pTooltip="PDF"
+            tooltipPosition="bottom"
+        ></button>
+    </span>
+
+    <span class="p-buttonset pr-1">
+        <button
+            *ngIf="criteria && manyCriterias()"
+            pButton
+            pRipple
+            (click)="onCriteriaClick()"
+            icon="fa-solid fa-filter fa-lg"
+            pBadge
+            style="font-size: 1rem"
+            [value]="nbrCriterias"
+            severity="success"
+        ></button>
+        <button
+            *ngIf="criteria && !manyCriterias()"
+            pButton
+            pRipple
+            (click)="onCriteriaClick()"
+            icon="fa-solid fa-filter fa-lg"
+        ></button>
+        <button
+            pButton
+            pRipple
+            icon="fa fa-undo fa-lg"
+            [ngClass]="{ 'border-round': !criteria }"
+            (click)="onReloadClick()"
+        ></button>
+    </span>
+    <button
+        id="btnAdd"
+        pButton
+        pRipple
+        *ngIf="displayAdd"
+        [disabled]="false"
+        icon="fa fa-plus fa-lg"
+        (click)="onAddClick()"
+    ></button>
+</span>

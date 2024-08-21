@@ -1,0 +1,102 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "std.master_documents_list" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="false"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'dictionary-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails jour</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="'e'"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <app-input-form
+                        [formGroup]="formGroup"
+                        [name]="'code'"
+                        [label]="'std.label_code'"
+                        [value]="f.code"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="true"
+                    >
+                    </app-input-form>
+                    <app-date-form
+                        [formGroup]="formGroup"
+                        [name]="'name'"
+                        [label]="'std.label_name'"
+                        [value]="f.name"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="true"
+                    >
+                    </app-date-form>
+                    <app-switch-form
+                        [formGroup]="formGroup"
+                        [name]="'history'"
+                        [label]="'std.label_history'"
+                        [value]="f.history"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    ></app-switch-form>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

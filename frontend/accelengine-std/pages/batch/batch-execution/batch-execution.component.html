@@ -1,0 +1,116 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "std.master_async_traitment_histories"
+                                    | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="false"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'batch-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Traitement {{ f.id.value }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="''"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel header="{{ 'std.header_log' | translate }}">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <strong>{{ selectedData.fileLogPath }}</strong>
+                                    </h4>
+                                </div>
+                            </p-toolbar>
+                            <div class="separator"></div>
+                            <div class="console">{{ fileLogContent }}</div>
+                        </p-tabPanel>
+                        <p-tabPanel *ngIf="isErrorFileAvailable" header="{{ 'std.header_error' | translate }}">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <strong>{{ selectedData.fileErrorPath }}</strong>
+                                    </h4>
+                                </div>
+                            </p-toolbar>
+                            <div class="separator"></div>
+                            <div class="console">{{ fileErrorContent }}</div>
+                        </p-tabPanel>
+                        <p-tabPanel *ngIf="isOutputFileAvailable" header="{{ 'std.header_output' | translate }}">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <strong>{{ selectedData.outputFilePath }}</strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <span class="p-buttonset pr-1">
+                                        <button type="button" 
+                                            pButton pRipple 
+                                            icon="fas fa-file-download" 
+                                            (click)="downloadOutputFile()"
+                                            pTooltip="Download" 
+                                            tooltipPosition="bottom"></button>
+                                    </span>
+                                </div>
+                            </p-toolbar>
+                            <div class="separator"></div>
+                            <div class="console">{{ outputFileContent }}</div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

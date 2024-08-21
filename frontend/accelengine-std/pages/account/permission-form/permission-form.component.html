@@ -1,0 +1,42 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'document'"
+            [label]="'Document'"
+            [placeholder]="'Indéfini'"
+            [values]="documents"
+            [displayField]="'code'"
+            [value]="f.document"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-select-form>
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'action'"
+            [label]="'Action'"
+            [placeholder]="'Indéfini'"
+            [values]="actions"
+            [displayField]="'name'"
+            [value]="f.action"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-select-form>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

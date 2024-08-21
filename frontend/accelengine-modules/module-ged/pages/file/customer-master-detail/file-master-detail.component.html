@@ -1,0 +1,98 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des fichiers</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="p-fluid main-body">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                    [export]="false"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails fichier</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="p-fluid">
+                <form [formGroup]="formGroup">
+                    <img
+                        src="http://localhost:9191/api/file/src/{{
+                            f.id.value
+                        }}"
+                        alt=""
+                    />
+                    <app-file-form
+                        [formGroup]="formGroup"
+                        [name]="'img'"
+                        [label]="'Choisir un fichier'"
+                        [value]="f.img"
+                        [accept]="'image/*'"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-file-form>
+                    <app-switch-form
+                        [formGroup]="formGroup"
+                        [name]="'shared'"
+                        [label]="'Partagé'"
+                        [value]="f.shared"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-switch-form>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

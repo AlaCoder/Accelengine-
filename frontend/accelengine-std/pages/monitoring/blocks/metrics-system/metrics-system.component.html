@@ -1,0 +1,73 @@
+<h5>System</h5>
+<ng-container *ngIf="!updating && systemMetrics">
+    <div class="grid">
+        <div class="col-4">Uptime</div>
+        <div class="col-8 text-right">
+            {{ convertMillisecondsToDuration(systemMetrics["process.uptime"]) }}
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-4">Start time</div>
+        <div class="col-8 text-right">
+            {{ systemMetrics["process.start.time"] | date: "dd/MM/yy HH:mm" }}
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-9">Process CPU usage</div>
+        <div class="col-3 text-right">
+            {{ 100 * systemMetrics["process.cpu.usage"] | number: "1.0-2" }} %
+        </div>
+    </div>
+    <p-progressBar
+        [value]="round(100 * systemMetrics['process.cpu.usage'])"
+        class="progressbar-success"
+    >
+        <span
+            >{{
+                100 * systemMetrics["process.cpu.usage"] | number: "1.0-2"
+            }}
+            %</span
+        >
+    </p-progressBar>
+    <div class="grid">
+        <div class="col-9">System CPU usage</div>
+        <div class="col-3 text-right">
+            {{ 100 * systemMetrics["system.cpu.usage"] | number: "1.0-2" }} %
+        </div>
+    </div>
+    <p-progressBar
+        [value]="round(100 * systemMetrics['system.cpu.usage'])"
+        class="progressbar-success"
+    >
+        <span
+            >{{
+                100 * systemMetrics["system.cpu.usage"] | number: "1.0-2"
+            }}
+            %</span
+        >
+    </p-progressBar>
+    <div class="grid">
+        <div class="col-9">System CPU count</div>
+        <div class="col-3 text-right">
+            {{ systemMetrics["system.cpu.count"] }}
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-9">System 1m Load average</div>
+        <div class="col-3 text-right">
+            {{ systemMetrics["system.load.average.1m"] | number: "1.0-2" }}
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-9">Process files max</div>
+        <div class="col-3 text-right">
+            {{ systemMetrics["process.files.max"] | number: "1.0-0" }}
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-9">Process files open</div>
+        <div class="col-3 text-right">
+            {{ systemMetrics["process.files.open"] | number: "1.0-0" }}
+        </div>
+    </div>
+</ng-container>

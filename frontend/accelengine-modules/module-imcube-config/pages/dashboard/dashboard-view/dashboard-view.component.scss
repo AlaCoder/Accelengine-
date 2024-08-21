@@ -1,0 +1,27 @@
+:host ::ng-deep .col-widget .p-card-body {
+    padding: 5px;
+}
+
+:host ::ng-deep .grid-main-body {
+    padding: 10px;
+
+    .p-card {
+        height: 100%;
+    }
+
+    .grid {
+        margin-right: -5px;
+        margin-left: -5px;
+        margin-top: -5px;
+    }
+
+    .col-12,
+    .col-10,
+    .col-8,
+    .col-6,
+    .col-4,
+    .col-3,
+    .col-2 {
+        padding: 5px;
+    }
+}

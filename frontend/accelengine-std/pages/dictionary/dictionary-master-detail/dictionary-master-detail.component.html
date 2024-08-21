@@ -1,0 +1,250 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "std.master_dictionary_types_list" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'dictionary-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>{{
+                                "std.detail_dictionary_type" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <p-tabView>
+                    <p-tabPanel header="{{ 'std.header_type' | translate }}">
+                        <form [formGroup]="formGroup">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'std.label_code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'label'"
+                                [label]="'std.label_label'"
+                                [value]="f.label"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-textarea-form
+                                [formGroup]="formGroup"
+                                [name]="'description'"
+                                [label]="'std.label_description'"
+                                [rows]="3"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                                {{ f.description }}
+                            </app-input-textarea-form>
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'otherValues'"
+                                [label]="'std.label_otherValues'"
+                                [value]="f.otherValues"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-switch-form>
+                            <div *ngIf="f.otherValues.value">
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valString1Label'"
+                                    [label]="' Libellé Chaine 1'"
+                                    [value]="f.valString1Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valString2Label'"
+                                    [label]="' Libellé Chaine 2'"
+                                    [value]="f.valString2Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valString3Label'"
+                                    [label]="'Libellé Chaine 3'"
+                                    [value]="f.valString3Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valInt1Label'"
+                                    [label]="'Libellé entier 1'"
+                                    [value]="f.valInt1Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valInt2Label'"
+                                    [label]="'Libellé entier 2'"
+                                    [value]="f.valInt2Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valInt3Label'"
+                                    [label]="'Libellé entier 3'"
+                                    [value]="f.valInt3Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valBool1Label'"
+                                    [label]="'Libellé boolean 1'"
+                                    [value]="f.valBool1Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valBool2Label'"
+                                    [label]="'Libellé boolean 2'"
+                                    [value]="f.valBool2Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valBool3Label'"
+                                    [label]="'Libellé boolean 3'"
+                                    [value]="f.valBool3Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valDate1Label'"
+                                    [label]="'Libellé Date 1'"
+                                    [value]="f.valDate1Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valDate2Label'"
+                                    [label]="'Libellé Date 2'"
+                                    [value]="f.valDate2Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                                <app-input-form
+                                    [formGroup]="formGroup"
+                                    [name]="'valDate3Label'"
+                                    [label]="'Libellé Date 3'"
+                                    [value]="f.valDate3Label"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                ></app-input-form>
+                            </div>
+                        </form>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Valeurs">
+                        <p-toolbar>
+                            <div class="p-toolbar-group-left">
+                                <h4>
+                                    <i class="fa fa-align-justify pr-2"></i>
+                                    <strong>Liste des valeurs</strong>
+                                </h4>
+                            </div>
+                            <div class="p-toolbar-group-right">
+                                <app-menu-crud
+                                    [types]="'a,e,d'"
+                                    [isAddDisabled]="!isEdit"
+                                    [isEditDisabled]="!canDeleteCopyChild"
+                                    [isDeleteDisabled]="!canDeleteCopyChild"
+                                    (addClick)="onAddChildClick($event)"
+                                    (editClick)="onEditChildClick($event)"
+                                    (deleteClick)="onDeleteChildClick($event)"
+                                >
+                                </app-menu-crud>
+                            </div>
+                        </p-toolbar>
+                        <app-data-table
+                            [stateKey]="
+                                'dictionary-master-detail-dictionaryValues'
+                            "
+                            [columns]="columnsChild"
+                            [value]="selectedData.dictionaryValues"
+                            [isDisabled]="!isEdit"
+                            [selectedData]="selectedChildData"
+                            (onSelectRow)="onSelectChildRow($event)"
+                            (onDblclickRow)="onDblclickChildRow($event)"
+                        ></app-data-table>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </p-card>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+<div
+    class="login-body flex flex-column align-items-center justify-content-center"
+>
+    <p-messages></p-messages>
+    <div
+        class="login-panel p-5 pt-6 p-fluid flex flex-column justify-content-center"
+    >
+        <div class="flex flex-column">
+            <div class="flex align-items-center justify-content-center">
+                <img src="{{ logoPath }}" alt="logo" />
+            </div>
+            <div class="flex align-items-center justify-content-center">
+                <h4 class="font-bold">{{ brandText }}</h4>
+            </div>
+            <div class="flex align-items-center justify-content-center">
+                <span class="mb-4 line-height-3"
+                    ><span class="font-bold">{{ brandDescription }}</span></span
+                >
+            </div>
+        </div>
+        <form
+            *ngIf="application && !application?.publicKey"
+            [formGroup]="loginForm"
+            (ngSubmit)="onSubmitKey()"
+        >
+            <app-input-textarea-form
+                [formGroup]="loginForm"
+                [name]="'publicKey'"
+                label="{{ 'label.publicKey' | translate }}"
+                [value]="f.publicKey"
+                [rows]="5"
+                [isSubmitted]="isSubmitted"
+            >
+            </app-input-textarea-form>
+            <div class="col-12 button-container">
+                <button
+                    type="submit"
+                    id="btnLogin"
+                    pButton
+                    label="{{ 'label.save' | translate }}"
+                    icon="{{ spin2 }}"
+                    iconPos="left"
+                ></button>
+            </div>
+        </form>
+        <form
+            *ngIf="application?.publicKey"
+            [formGroup]="loginForm"
+            (ngSubmit)="onSubmit()"
+        >
+            <app-input-form
+                [formGroup]="loginForm"
+                [name]="'email'"
+                [placeholder]="'label.login'"
+                [iconLeft]="'fa fa-user'"
+                [value]="f.email"
+                [isSubmitted]="isSubmitted"
+            >
+            </app-input-form>
+            <app-input-form
+                [formGroup]="loginForm"
+                [type]="'password'"
+                [name]="'password'"
+                [placeholder]="'label.password'"
+                [iconLeft]="'fa fa-key'"
+                [value]="f.password"
+                [isSubmitted]="isSubmitted"
+            >
+            </app-input-form>
+            <app-select-form
+                *ngIf="activationTenant"
+                [formGroup]="loginForm"
+                [name]="'tenant'"
+                [label]="'Tenant'"
+                [placeholder]="'Sélectionner un tenant'"
+                [values]="tenants"
+                [value]="f.tenant"
+                [displayField]="'codeName'"
+                [dataKey]="''"
+                [returnValue]="'path'"
+                [isSubmitted]="isSubmitted"
+            >
+            </app-select-form>
+            <div class="col-12 button-container">
+                <button
+                    type="submit"
+                    id="btnLogin"
+                    pButton
+                    label="{{ 'label.signin' | translate }}"
+                    icon="{{ spin }}"
+                    iconPos="left"
+                    [loading]="isLoading"
+                ></button>
+            </div>
+        </form>
+        <div class="flex align-items-center justify-content-center">
+            <span class="mt-4 logo-container2">
+                <img src="assets/images/discovery.png" alt="logo" />
+            </span>
+        </div>
+    </div>
+</div>

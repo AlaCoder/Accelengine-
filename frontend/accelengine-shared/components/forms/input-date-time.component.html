@@ -1,0 +1,72 @@
+<div class="form p-fluid">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            *ngIf="isDisabled"
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <input
+                pInputText
+                type="text"
+                id="{{ name }}"
+                name="{{ name }}"
+                [(ngModel)]="dateString"
+                class="p-inputtext-sm"
+                [ngClass]="{
+                    'ng-dirty ng-invalid': isSubmitted && getErrors()
+                }"
+                placeholder="{{ placeholder | translate }}"
+                [attr.disabled]="isDisabled ? '' : null"
+            />
+        </div>
+        <div
+            *ngIf="!isDisabled"
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <p-calendar
+                [(ngModel)]="dateValue"
+                class="form-control"
+                [ngClass]="{
+                    'ng-dirty ng-invalid': isSubmitted && getErrors()
+                }"
+                placeholder="{{ placeholder | translate }}"
+                (ngModelChange)="onValueChangeDate($event)"
+                [showTime]="true"
+                [showSeconds]="true"
+                [showIcon]="true"
+                [showButtonBar]="!timeOnly"
+                [monthNavigator]="true"
+                [yearNavigator]="true"
+                [minDate]="minDateValue"
+                [maxDate]="maxDateValue"
+                [yearRange]="getYearRange()"
+                [disabledDays]="disabledDays"
+                [disabledDates]="disabledDates"
+                [appendTo]="'body'"
+                [timeOnly]="timeOnly"
+                [hourFormat]="hourFormat"
+            >
+            </p-calendar>
+            <small>{{ help }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

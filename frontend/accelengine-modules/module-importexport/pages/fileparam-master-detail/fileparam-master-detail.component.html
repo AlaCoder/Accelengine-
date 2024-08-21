@@ -1,0 +1,217 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des fichiers</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <span class="p-buttonset pr-1">
+                            <button
+                                type="button"
+                                pButton
+                                pRipple
+                                icon="fas fa-file-export"
+                                (click)="exporter()"
+                                pTooltip="Exporter paramétrage"
+                                tooltipPosition="bottom"
+                            ></button>
+                        </span>
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-selectable-data-table
+                    [columns]="columns"
+                    [value]="datas"
+                    [(selectedData)]="selectedDatas"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-selectable-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails fichier</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView [(activeIndex)]="indexOfOpenedPanel">
+                        <p-tabPanel header="Fichier">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'Code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'type'"
+                                [label]="'Type fichier'"
+                                [placeholder]="'Indéfini'"
+                                [values]="listTypes"
+                                [value]="f.type"
+                                [displayField]="'label'"
+                                [dataKey]="''"
+                                [returnValue]="'code'"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-select-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'extension'"
+                                [label]="'Extension'"
+                                [value]="f.extension"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-textarea-form
+                                [formGroup]="formGroup"
+                                [name]="'description'"
+                                [label]="'Description'"
+                                [rows]="3"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                                {{ f.description }}
+                            </app-input-textarea-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'version'"
+                                [label]="'Version'"
+                                [value]="f.version"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'separator'"
+                                [label]="'Séparateur'"
+                                [value]="f.separator"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                        </p-tabPanel>
+                        <p-tabPanel header="Lignes">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong>Liste des lignes</strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <app-menu-crud
+                                        [types]="'a,e,d'"
+                                        [isAddDisabled]="!isEdit"
+                                        [isEditDisabled]="!canDeleteCopyChild"
+                                        [isDeleteDisabled]="!canDeleteCopyChild"
+                                        (addClick)="onAddChildClick($event)"
+                                        (editClick)="onEditChildClick($event)"
+                                        (deleteClick)="
+                                            onDeleteChildClick($event)
+                                        "
+                                    >
+                                    </app-menu-crud>
+                                </div>
+                            </p-toolbar>
+                            <app-data-table
+                                [stateKey]="'file-master-detail-lines'"
+                                [columns]="columnsLine"
+                                [value]="selectedData.lines"
+                                [isDisabled]="!isEdit"
+                                [selectedData]="selectedChildData"
+                                [export]="false"
+                                (onSelectRow)="onSelectChildRow($event)"
+                                (onDblclickRow)="onDblclickChildRow($event)"
+                                (onButtonClickEvent)="
+                                    onButtonClickEvent($event)
+                                "
+                            ></app-data-table>
+                        </p-tabPanel>
+                        <p-tabPanel header="Champs" *ngIf="displayFields">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong>Liste des champs</strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <app-menu-crud
+                                        [types]="'a,e,d'"
+                                        [isAddDisabled]="!isEdit"
+                                        [isEditDisabled]="!selectedFieldData"
+                                        [isDeleteDisabled]="!selectedFieldData"
+                                        (editClick)="onEditFieldClick($event)"
+                                        (addClick)="onAddFieldClick($event)"
+                                        (deleteClick)="
+                                            onDeleteFieldClick($event)
+                                        "
+                                    >
+                                    </app-menu-crud>
+                                </div>
+                            </p-toolbar>
+                            <app-data-table
+                                [stateKey]="'file-master-detail-fields'"
+                                [columns]="columnsField"
+                                [value]="selectedChildData.fields"
+                                [export]="false"
+                                [isDisabled]="!isEdit"
+                                [selectedData]="selectedFieldData"
+                                (onDblclickRow)="onDblclickFieldRow($event)"
+                            ></app-data-table>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

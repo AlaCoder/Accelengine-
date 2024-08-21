@@ -1,0 +1,134 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "Liste des tenants" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <p-tree
+                    [value]="trees"
+                    [filter]="true"
+                    [emptyMessage]="'Aucun tenant'"
+                    [filterPlaceholder]="'Filter par nom'"
+                    filterMode="strict"
+                    selectionMode="single"
+                    scrollHeight="flex"
+                    [draggableNodes]="true"
+                    [droppableNodes]="true"
+                    draggableScope="self"
+                    droppableScope="self"
+                    [validateDrop]="true"
+                    (onNodeDrop)="onDrop($event)"
+                >
+                    <ng-template let-node pTemplate="default">
+                        <div>
+                            <span (click)="onNodeSelect(node.data)">{{
+                                node.label
+                            }}</span>
+                            <a
+                                (click)="onAddNodeClick(node)"
+                                class="ml-2 btn-add-node"
+                            >
+                                <i class="fa fa-plus fa-sm"></i>
+                            </a>
+                        </div>
+                    </ng-template>
+                </p-tree>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong
+                                >{{ "Détails tenant" | translate }}
+                                {{ selectedData?.code }}</strong
+                            >
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="'e,d,c'"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel header="Tenant">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [placeholder]="'Indéfini'"
+                                [type]="'text'"
+                                [name]="'code'"
+                                [label]="'Code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit || isDefaultTenant"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [type]="'text'"
+                                [name]="'name'"
+                                [placeholder]="'Indéfini'"
+                                [label]="'Nom'"
+                                [value]="f.name"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'parentTenant'"
+                                [label]="'Tenant parent'"
+                                [placeholder]="'Indéfini'"
+                                [value]="f.parentTenant"
+                                [values]="tenants"
+                                [displayField]="'codeName'"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit || isDefaultTenant"
+                            >
+                            </app-select-form>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

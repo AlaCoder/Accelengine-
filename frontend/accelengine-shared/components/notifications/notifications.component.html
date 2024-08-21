@@ -1,0 +1,67 @@
+<span class="notif">
+    <a (click)="visibleSidebar = true" class="mt-3 ml-2">
+        <i class="fa fa-bell fa-bell-top-bar"></i>
+        <p-progressSpinner
+            *ngIf="isLoadingProgressSpinner"
+            [style]="{
+                width: '20px',
+                height: '20px',
+                position: 'relative',
+                top: '-15px',
+                left: '-12px'
+            }"
+            styleClass="custom-spinner"
+            strokeWidth="8"
+            fill="#EEEEEE"
+            animationDuration=".5s"
+        ></p-progressSpinner>
+        <p-badge
+            *ngIf="!isLoadingProgressSpinner"
+            severity="danger"
+            [value]="
+                visibilitySeenNotifications
+                    ? numberOfNotSeenNotifications
+                    : notifications.totalRecords
+            "
+            [style]="{
+                position: 'relative',
+                top: '-15px',
+                left: '-5px',
+                'margin-right': '-20px'
+            }"
+        ></p-badge>
+    </a>
+</span>
+
+<p-sidebar
+    [(visible)]="visibleSidebar"
+    position="right"
+    [style]="styleSidebar"
+    [appendTo]="'body'"
+>
+    <span class="flex justify-content-between">
+        <h3>Notifications</h3>
+        <button
+            pButton
+            pRipple
+            type="button"
+            label="{{ 'label.allasread' | translate }}"
+            class="p-button-secondary p-button-text"
+            [disabled]="numberOfNotSeenNotifications === 0"
+            (click)="markAllAsRead()"
+        ></button>
+    </span>
+    <app-data-table
+        [columns]="columnsNotifications"
+        [value]="notifications"
+        [paginator]="true"
+        [export]="false"
+        [showCurrentPageReport]="true"
+        (onPageChanged)="onPageChanged($event)"
+        (onDblclickRow)="onDblclickRow($event)"
+        [rows]="10"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [first]="10 * page + 1"
+    >
+    </app-data-table>
+</p-sidebar>

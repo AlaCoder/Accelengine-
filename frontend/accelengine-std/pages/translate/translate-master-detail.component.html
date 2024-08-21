@@ -1,0 +1,124 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong
+                                >{{
+                                    "std.master_dictionary_translations_list"
+                                        | translate
+                                }}
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                            [displayAdd]="false"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'dictionary-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails message</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="'e'"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-4">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'language'"
+                                [label]="'Language'"
+                                [value]="f.language"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                        </div>
+                        <div class="col-4">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'codeModule'"
+                                [label]="'Code Module'"
+                                [value]="f.codeModule"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                        </div>
+                        <div class="col-4">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'Code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-form>
+                        </div>
+                    </div>
+                    <app-input-textarea-form
+                        [formGroup]="formGroup"
+                        [name]="'message'"
+                        [label]="'Message'"
+                        [value]="f.message"
+                        [rows]="4"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-input-textarea-form>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

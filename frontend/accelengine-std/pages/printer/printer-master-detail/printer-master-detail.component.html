@@ -1,0 +1,115 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des imprimantes</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayExport]="true"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'role-master-detail'"
+                    [export]="true"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails imprimante</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <app-input-form
+                        [formGroup]="formGroup"
+                        [name]="'code'"
+                        [label]="'Code'"
+                        [value]="f.code"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-input-form>
+                    <app-input-form
+                        [formGroup]="formGroup"
+                        [name]="'name'"
+                        [label]="'Nom'"
+                        [value]="f.name"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-input-form>
+                    <app-select-form
+                        [formGroup]="formGroup"
+                        [name]="'url'"
+                        [label]="'URL'"
+                        [placeholder]="'Indéfini'"
+                        [value]="f.url"
+                        [values]="printers"
+                        [displayField]="'label'"
+                        [returnValue]="'code'"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-select-form>
+                    <app-switch-form
+                        [formGroup]="formGroup"
+                        [name]="'defaultPrinter'"
+                        [label]="'Default'"
+                        [value]="f.defaultPrinter"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="!isEdit"
+                    >
+                    </app-switch-form>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<p-progressBar
+    *ngIf="datasIsLoading"
+    mode="indeterminate"
+    [style]="{ height: '6px' }"
+>
+</p-progressBar>
+<div class="grid" *ngIf="currentWidget" #widget style="height: 100%">
+    <div class="col-12" *ngIf="!datasIsLoading">
+        <app-widget-view-table
+            *ngIf="currentWidget.widgetType === 'TABLE'"
+            [widget]="currentWidget"
+        ></app-widget-view-table>
+        <app-widget-view-pivottable
+            *ngIf="currentWidget.widgetType === 'PIVOTTABLE'"
+            [widget]="currentWidget"
+            (onNodesPathChanged)="onNodesPathChanged($event)"
+        ></app-widget-view-pivottable>
+        <app-widget-view-pivottable2
+            *ngIf="currentWidget.widgetType === 'PIVOTTABLE2'"
+            [widget]="currentWidget"
+            (onNodesPathChanged)="onNodesPathChanged($event)"
+        ></app-widget-view-pivottable2>
+        <app-widget-view-indicator
+            *ngIf="currentWidget.widgetType === 'INDICATOR'"
+            [widget]="currentWidget"
+        ></app-widget-view-indicator>
+        <app-widget-view-bar
+            *ngIf="currentWidget.widgetType === 'BAR'"
+            [widget]="currentWidget"
+        ></app-widget-view-bar>
+        <app-widget-view-pie
+            *ngIf="currentWidget.widgetType === 'PIE'"
+            [widget]="currentWidget"
+        ></app-widget-view-pie>
+        <app-widget-view-gauge
+            *ngIf="currentWidget.widgetType === 'GAUGE'"
+            [widget]="currentWidget"
+        ></app-widget-view-gauge>
+    </div>
+</div>

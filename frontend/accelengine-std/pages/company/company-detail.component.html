@@ -1,0 +1,241 @@
+<div class="grid">
+    <div class="col-12">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Société</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [showResiz]="false"
+                            [types]="'e'"
+                            (editClick)="onEditClick()"
+                        ></app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <div class="grid p-2">
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h5>Information Société</h5>
+                                <div class="p-fluid">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'socialReason'"
+                                        [label]="'Raison sociale'"
+                                        [placeholder]="'Raison Social RS'"
+                                        [value]="f.socialReason"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'siren'"
+                                        [label]="'Siren'"
+                                        [value]="f.siren"
+                                        (keypress)="numberOnly($event)"
+                                        placeholder="123 456 789"
+                                        min="0"
+                                        pattern="([0-9]{9})"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'tva'"
+                                        [label]="'TVA'"
+                                        [value]="f.tva"
+                                        [placeholder]="'TN6123456789'"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'legalForm'"
+                                        [label]="'Forme juridique'"
+                                        [value]="f.legalForm"
+                                        [placeholder]="'SARL'"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'rcs'"
+                                        [label]="'Registre du Commerce et des Sociétés RCS'"
+                                        [value]="f.rcs"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'activity'"
+                                        [label]="'Activité'"
+                                        [value]="f.activity"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'workforce'"
+                                        [label]="'Effectifs'"
+                                        [value]="f.workforce"
+                                        (keypress)="numberOnly($event)"
+                                        [placeholder]="'10'"
+                                        min="0"
+                                        pattern="([0-9]{9})"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'webSiteURL'"
+                                        [label]="'Site Web'"
+                                        [type]="'url'"
+                                        [value]="f.webSiteURL"
+                                        placeholder="https://www.exemple.com"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-dictionary-select
+                                        [formGroup]="formGroup"
+                                        [typeCode]="'Currency'"
+                                        [label]="'Devise'"
+                                        [name]="'currency'"
+                                        [value]="f.currency"
+                                        [displayField]="'label'"
+                                        [returnValue]="'code'"
+                                        [placeholder]="currency? currency : 'Indéfini'"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-dictionary-select>
+                                    <p-fileUpload
+                                        [formGroup]="formGroup"
+                                        [id]="file"
+                                        name="'file'"
+                                        mode="basic"
+                                        chooseLabel="Choisir un logo"
+                                        [showUploadButton]="false"
+                                        [showCancelButton]="false"
+                                        accept="image/*"
+                                        [ngClass]="{ ' ng-dirty ng-invalid': isSubmitted }"
+                                        [disabled]="!isEdit"
+                                        (onSelect)="receiveDocument($event)"
+                                    >
+                                    </p-fileUpload>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h5>Contact Société</h5>
+                                <div class="p-fluid">
+                                    <app-number-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'mainPhone'"
+                                        [label]="'Téléphone'"
+                                        [value]="
+                                            formGroup
+                                                .get('contact')
+                                                .get('mainPhone')
+                                        "
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [maxlength]="10"
+                                    >
+                                    </app-number-form>
+                                    <app-number-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'fax1'"
+                                        [label]="'Fax'"
+                                        [value]="
+                                            formGroup
+                                                .get('contact')
+                                                .get('fax1')
+                                        "
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [maxlength]="10"
+                                    >
+                                    </app-number-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'email1'"
+                                        [type]="'email'"
+                                        [label]="'Email'"
+                                        [placeholder]="'exemple@gmail.com'"
+                                        [value]="formGroup
+                                        .get('contact')
+                                        .get('email1')"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'mainAddress'"
+                                        [label]="'Adresse'"
+                                        [value]="formGroup
+                                        .get('contact')
+                                        .get('mainAddress')"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'postalCode'"
+                                        [label]="'Code postal'"
+                                        [value]="formGroup
+                                        .get('contact')
+                                        .get('postalCode')"
+                                        (keypress)="numberOnly($event)"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'city'"
+                                        [label]="'Ville'"
+                                        [value]="formGroup
+                                        .get('contact')
+                                        .get('city')"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup.get('contact')"
+                                        [name]="'country'"
+                                        [label]="'Pays'"
+                                        [value]="formGroup
+                                        .get('contact')
+                                        .get('country')"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

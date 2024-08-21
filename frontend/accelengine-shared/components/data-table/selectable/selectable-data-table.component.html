@@ -1,0 +1,72 @@
+<p-table
+    #pTableId
+    dataKey="id"
+    styleClass="p-datatable-striped pt-2"
+    [columns]="columns"
+    [frozenColumns]="fixedColumns"
+    [value]="filteredDatas"
+    [loading]="loading"
+    [(selection)]="selectedData"
+    [scrollable]="true"
+    [frozenWidth]="fixedColumns ? fixedWidth : null"
+    [selectionMode]="selectionMode"
+    (onRowSelect)="sendSelectedData($event)"
+    (onRowUnselect)="sendSelectedData($event)"
+    (onHeaderCheckboxToggle)="sendSelectedData($event)"
+    (onPage)="onPageChange($event)"
+>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="width: 40px; flex: none" *ngIf="!selectionMode">
+                <p-tableHeaderCheckbox
+                    *ngIf="!isDisabled && isSelectAllVisible"
+                ></p-tableHeaderCheckbox>
+            </th>
+            <th
+                *ngFor="let column of columns"
+                [pSortableColumn]="column.sort ? column.field : ''"
+            >
+                <div
+                    style="width: 100%"
+                    class="flex justify-content-between flex-wrap"
+                >
+                    {{ column.header | translate }}
+                    <p-sortIcon
+                        *ngIf="column.sort"
+                        field="{{ column.field }}"
+                    ></p-sortIcon>
+                </div>
+            </th>
+        </tr>
+        <tr *ngIf="showFilter()" class="filter">
+            <th style="width: 40px; flex: none" *ngIf="!selectionMode"></th>
+            <th *ngFor="let column of columns">
+                <input
+                    *ngIf="column.filter"
+                    pInputText
+                    type="text"
+                    (input)="filter(dt, $event.target.value, column)"
+                    class="p-column-filter"
+                />
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr
+            [pSelectableRow]="rowData"
+            (dblclick)="dblclick(rowData)"
+            class="noselect"
+        >
+            <td style="width: 40px; flex: none" *ngIf="!selectionMode">
+                <p-tableCheckbox
+                    [value]="rowData"
+                    *ngIf="!isDisabled"
+                ></p-tableCheckbox>
+            </td>
+            <td
+                *ngFor="let column of columns"
+                [innerHTML]="getData(rowData, column)"
+            ></td>
+        </tr>
+    </ng-template>
+</p-table>

@@ -1,0 +1,256 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "cli": {
+        "analytics": false
+    },
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "accelengine": {
+            "projectType": "application",
+            "schematics": {
+                "@schematics/angular:component": {
+                    "style": "scss"
+                }
+            },
+            "root": "",
+            "sourceRoot": "frontend",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/accelengine-ng",
+                        "index": "frontend/index.html",
+                        "main": "frontend/main.ts",
+                        "polyfills": "frontend/polyfills.ts",
+                        "tsConfig": "tsconfig.app.json",
+                        "aot": true,
+                        "assets": [
+                            "frontend/assets",
+                            "frontend/favicon.ico"
+                        ],
+                        "styles": [
+                            "frontend/styles.scss",
+                            "frontend/assets/jquery/css/flowchart.css",
+                            "node_modules/quill/dist/quill.core.css",
+                            "node_modules/quill/dist/quill.snow.css",
+                            "./node_modules/leaflet/dist/leaflet.css"
+                        ],
+                        "scripts": [
+                            "node_modules/prismjs/prism.js",
+                            "node_modules/prismjs/components/prism-typescript.js",
+                            "frontend/assets/jquery/js/jquery.min.js",
+                            "frontend/assets/jquery/js/jquery-ui.min.js",
+                            "frontend/assets/jquery/js/jquery.panzoom.min.js",
+                            "frontend/assets/jquery/js/jquery.mousewheel.min.js",
+                            "frontend/assets/jquery/js/jquery.flowchart.min.js",
+                            "node_modules/quill/dist/quill.js"
+                        ],
+                        "allowedCommonJsDependencies": [
+                            "@fullcalendar/daygrid",
+                            "@fullcalendar/timegrid",
+                            "@fullcalendar/interaction",
+                            "chart.js",
+                            "moment-timezone",
+                            "jwt-decode",
+                            "lodash",
+                            "rxjs",
+                            "fabric",
+                            "file-saver",
+                            "jspdf-autotable",
+                            "jspdf",
+                            "xlsx",
+                            "crypto-js",
+                            "is-ip",
+                            "core-js/modules/es.array.index-of.js",
+                            "core-js/modules/es.array.iterator.js",
+                            "core-js/modules/es.array.reduce.js",
+                            "core-js/modules/es.array.reverse.js",
+                            "core-js/modules/es.promise.js",
+                            "core-js/modules/es.regexp.to-string.js",
+                            "core-js/modules/es.string.ends-with.js",
+                            "core-js/modules/es.string.includes.js",
+                            "core-js/modules/es.string.match.js",
+                            "core-js/modules/es.string.replace.js",
+                            "core-js/modules/es.string.split.js",
+                            "core-js/modules/es.string.starts-with.js",
+                            "core-js/modules/es.string.trim.js",
+                            "core-js/modules/web.dom-collections.iterator.js",
+                            "raf"
+                        ]
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "1mb",
+                                    "maximumError": "1mb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "frontend/environments/environment.ts",
+                                    "with": "frontend/environments/environment.prod.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "buildOptimizer": false,
+                            "optimization": false,
+                            "vendorChunk": true,
+                            "extractLicenses": false,
+                            "sourceMap": true,
+                            "namedChunks": true
+                        },
+                        "stagingDevelop": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "1mb",
+                                    "maximumError": "1mb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "frontend/environments/environment.ts",
+                                    "with": "frontend/environments/environment.staging-develop.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "stagingMaster": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "3mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "1mb",
+                                    "maximumError": "1mb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "frontend/environments/environment.ts",
+                                    "with": "frontend/environments/environment.staging-master.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "accelengine:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "accelengine:build:production"
+                        },
+                        "development": {
+                            "browserTarget": "accelengine:build:development"
+                        },
+                        "staging": {
+                            "browserTarget": "accelengine:build:staging"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "accelengine:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "frontend/test.ts",
+                        "polyfills": "frontend/polyfills.ts",
+                        "tsConfig": "tsconfig.spec.json",
+                        "karmaConfig": "karma.conf.js",
+                        "styles": [
+                            "frontend/styles.scss"
+                        ],
+                        "scripts": [],
+                        "assets": [
+                            "frontend/assets",
+                            "frontend/upload.php",
+                            "frontend/favicon.ico"
+                        ]
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tsconfig.app.json",
+                            "tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        },
+        "accelengine-lib": {
+            "projectType": "library",
+            "root": "frontend/accelengine-lib",
+            "sourceRoot": "frontend/accelengine-lib/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "options": {
+                        "tsConfig": "frontend/accelengine-lib/tsconfig.lib.json",
+                        "project": "frontend/accelengine-lib/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "frontend/accelengine-lib/tsconfig.lib.prod.json"
+                        }
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "frontend/accelengine-lib/src/test.ts",
+                        "tsConfig": "frontend/accelengine-lib/tsconfig.spec.json",
+                        "karmaConfig": "frontend/accelengine-lib/karma.conf.js"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "frontend/accelengine-lib/tsconfig.lib.json",
+                            "frontend/accelengine-lib/tsconfig.spec.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "defaultProject": "accelengine"
+}

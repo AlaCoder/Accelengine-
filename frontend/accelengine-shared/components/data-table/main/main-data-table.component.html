@@ -1,0 +1,255 @@
+<p-table
+    #pTableId
+    dataKey="id"
+    styleClass="p-datatable-striped pt-2"
+    [columns]="columns"
+    [frozenColumns]="fixedColumns"
+    [value]="filteredDatas"
+    [loading]="loading"
+    [(selection)]="selectedData"
+    [scrollable]="true"
+    [frozenWidth]="fixedColumns ? fixedWidth : null"
+    csvSeparator=";"
+    [exportFilename]="CSVFilename"
+    [scrollHeight]="scrollHeight"
+    [sortMode]="'multiple'"
+    (onSort)="onSortChange($event)"
+>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" />
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th
+                *ngFor="let column of columns"
+                [pSortableColumn]="column.sort ? column.field : ''"
+                [style.max-width.px]="column.width"
+            >
+                <div class="flex justify-content-between flex-wrap">
+                    <div>
+                        {{ column.header | translate }}
+                    </div>
+                    <div>
+                        <p-sortIcon
+                            *ngIf="column.sort"
+                            field="{{ column.field }}"
+                        ></p-sortIcon>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        <tr *ngIf="showFilter()" class="filter">
+            <th
+                *ngFor="let column of columns"
+                [style.max-width.px]="column.width"
+            >
+                <input
+                    *ngIf="column.filter"
+                    pInputText
+                    type="text"
+                    (input)="filter(dt, $event.target.value, column)"
+                    class="p-column-filter"
+                />
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-i="rowIndex"
+    >
+        <tr
+            #elementRef
+            [pSelectableRow]="rowData"
+            (dblclick)="dblclick(rowData)"
+            class="noselect"
+            [style]="rowData && rowData.style ? rowData.style : ''"
+        >
+            <ng-container *ngFor="let column of columns">
+                <td
+                    *ngIf="!isButton(column) && !column.isEditable"
+                    [innerHTML]="getData(rowData, column, elementRef)"
+                    [style.max-width.px]="column.width"
+                    [ngStyle]="
+                        column.activateStyleColumn
+                            ? rowData.styleColumn
+                                ? rowData.styleColumn
+                                : column.styleColumn
+                            : ''
+                    "
+                ></td>
+                <td
+                    pEditableColumn
+                    *ngIf="column.isEditable"
+                    [style.max-width.px]="column.width"
+                >
+                    <p-cellEditor style="width: 100%">
+                        <ng-template pTemplate="input">
+                            <ng-container [ngSwitch]="column.type">
+                                <ng-container *ngSwitchCase="4">
+                                    <input
+                                        *ngIf="!column.isDropdown"
+                                        pInputText
+                                        type="text"
+                                        [disabled]="!column.isEditable"
+                                        [(ngModel)]="rowData[column.field]"
+                                        (ngModelChange)="
+                                            onValueChange($event, rowData)
+                                        "
+                                        (keyup)="onValueKeyup($event, rowData)"
+                                    />
+                                    <p-dropdown
+                                        *ngIf="column.isDropdown"
+                                        [disabled]="!column.isEditable"
+                                        [options]="
+                                            rowData && rowData.dropdownValues
+                                                ? rowData.dropdownValues
+                                                : column.dropdownValues
+                                        "
+                                        [optionLabel]="
+                                            rowData &&
+                                            rowData.dropdownDisplayField
+                                                ? rowData.dropdownDisplayField
+                                                : column.dropdownDisplayField
+                                        "
+                                        [optionValue]="
+                                            rowData &&
+                                            rowData.dropdownReturnValue
+                                                ? rowData.dropdownReturnValue
+                                                : column.dropdownReturnValue
+                                        "
+                                        [(ngModel)]="rowData[column.field]"
+                                        appendTo="body"
+                                        (ngModelChange)="
+                                            onValueChange($event, rowData)
+                                        "
+                                    >
+                                    </p-dropdown>
+                                </ng-container>
+                                <p-inputNumber
+                                    *ngSwitchCase="3"
+                                    id="{{ column.field + i }}"
+                                    [disabled]="!column.isEditable"
+                                    [(ngModel)]="datas[i][column.field]"
+                                    [mode]="column.modeEditableNumber"
+                                    [minFractionDigits]="
+                                        column.minFractionDigitsEditableNumber
+                                    "
+                                    [min]="column.minEditableNumber"
+                                    [max]="column.maxEditableNumber"
+                                    [prefix]="column.prefixEditableNumber"
+                                    [suffix]="column.suffixEditableNumber"
+                                    locale="en-IN"
+                                    (onFocus)="onFocusInputNumber($event)"
+                                    (ngModelChange)="
+                                        onValueChange($event, rowData)
+                                    "
+                                    (keyup)="onValueKeyup($event, rowData)"
+                                >
+                                </p-inputNumber>
+                                <p-inputSwitch
+                                    *ngSwitchCase="0"
+                                    [disabled]="!column.isEditable"
+                                    [(ngModel)]="rowData[column.field]"
+                                    (ngModelChange)="
+                                        onValueChange($event, rowData)
+                                    "
+                                >
+                                </p-inputSwitch>
+                                <ng-template ngSwitchDefault>
+                                    <input
+                                        pInputText
+                                        type="text"
+                                        [disabled]="!column.isEditable"
+                                        [(ngModel)]="rowData[column.field]"
+                                    />
+                                </ng-template>
+                            </ng-container>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <p
+                                [innerHTML]="
+                                    getData(rowData, column, elementRef)
+                                "
+                            ></p>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td
+                    *ngIf="isButton(column) && !column.isButton2"
+                    class="flex align-items-center justify-content-center"
+                    [style.max-width.px]="column.width"
+                >
+                    <button
+                        pButton
+                        pRipple
+                        icon="{{
+                            rowData && rowData.buttonIcon
+                                ? rowData.buttonIcon
+                                : column.buttonIcon
+                        }}"
+                        label="{{
+                            rowData && rowData.buttonLabel
+                                ? (rowData.buttonLabel | translate)
+                                : (column.buttonLabel | translate)
+                        }}"
+                        class="{{
+                            rowData && rowData.buttonClass
+                                ? rowData.buttonClass
+                                : column.buttonClass
+                        }}"
+                        (click)="clickEvent(rowData, column)"
+                    ></button>
+                </td>
+                <td
+                    *ngIf="isButton(column) && column.isButton2"
+                    class="flex align-items-center justify-content-center"
+                    [style.max-width.px]="column.width"
+                >
+                    <button
+                        pButton
+                        pRipple
+                        icon="{{
+                            rowData && rowData.buttonIcon2
+                                ? rowData.buttonIcon2
+                                : column.buttonIcon2
+                        }}"
+                        label="{{
+                            rowData && rowData.buttonLabel2
+                                ? (rowData.buttonLabel2 | translate)
+                                : (column.buttonLabel2 | translate)
+                        }}"
+                        class="{{
+                            rowData && rowData.buttonClass2
+                                ? rowData.buttonClass2
+                                : column.buttonClass2
+                        }}"
+                        (click)="clickEvent2(rowData, column)"
+                    ></button>
+                </td>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <!--<a Aucun résultat trouvé
+    modules.table.data.message></a> -->
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length">
+                {{ "Aucun résultat trouvé" | translate }}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-paginator
+    *ngIf="paginator"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [first]="first"
+    (onPageChange)="onPageChange($event)"
+    [showCurrentPageReport]="showCurrentPageReport"
+    currentPageReportTemplate="{{ 'messages.pagination' | translate }}"
+></p-paginator>

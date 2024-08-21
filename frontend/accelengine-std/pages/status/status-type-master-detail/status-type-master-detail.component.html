@@ -1,0 +1,156 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "Gestion des types (Statuts /Priorités)"
+                                    | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'dictionary-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>{{ "Détails status" | translate }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <p-tabView>
+                    <p-tabPanel header="{{ 'Type' | translate }}">
+                        <form [formGroup]="formGroup">
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'document'"
+                                [label]="'Document'"
+                                [placeholder]="'Sélectionner un document'"
+                                [values]="documents"
+                                [value]="f.document"
+                                [displayField]="'code'"
+                                [dataKey]="''"
+                                [returnValue]="''"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-select-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'Code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'name'"
+                                [label]="'Nom'"
+                                [value]="f.name"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'isPriority'"
+                                [label]="'isPriority'"
+                                [value]="f.isPriority"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                (onChange)="isPriorityFn($event)"
+                            >
+                            </app-switch-form>
+                        </form>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Statuts">
+                        <p-toolbar>
+                            <div class="p-toolbar-group-left">
+                                <h4>
+                                    <i class="fa fa-align-justify pr-2"></i>
+                                    <strong>Liste des Status/Priorités</strong>
+                                </h4>
+                            </div>
+                            <div class="p-toolbar-group-right">
+                                <app-menu-crud
+                                    [types]="'a,e,d'"
+                                    [isAddDisabled]="!isEdit"
+                                    [isEditDisabled]="!canDeleteCopyChild"
+                                    [isDeleteDisabled]="!canDeleteCopyChild"
+                                    (addClick)="onAddChildClick($event)"
+                                    (editClick)="onEditChildClick($event)"
+                                    (deleteClick)="onDeleteChildClick($event)"
+                                >
+                                </app-menu-crud>
+                            </div>
+                        </p-toolbar>
+                        <app-data-table
+                            [stateKey]="
+                                'dictionary-master-detail-dictionaryValues'
+                            "
+                            [columns]="columnsChild"
+                            [value]="selectedData.statuses"
+                            [isDisabled]="!isEdit"
+                            [selectedData]="selectedChildData"
+                            (onSelectRow)="onSelectChildRow($event)"
+                            (onDblclickRow)="onDblclickChildRow($event)"
+                        ></app-data-table>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </p-card>
+    </div>
+</div>

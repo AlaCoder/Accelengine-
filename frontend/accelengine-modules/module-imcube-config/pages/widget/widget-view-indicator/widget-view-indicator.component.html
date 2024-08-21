@@ -1,0 +1,12 @@
+<div
+    class="flex align-content-center justify-content-center flex-wrap card-container"
+>
+    <div class="flex align-items-center justify-content-center">
+        <div class="indicator" *ngFor="let col of currentWidget.sortRows">
+            <div class="indicator-name">{{ col.name }}</div>
+            <div class="indicator-value">
+                {{ getRowData(col) }}
+            </div>
+        </div>
+    </div>
+</div>

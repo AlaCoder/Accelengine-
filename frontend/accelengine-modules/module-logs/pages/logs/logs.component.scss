@@ -1,0 +1,11 @@
+.tab-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns the buttons to the right */
+  gap: 0.5rem; /* Adds space between the buttons */
+  margin-top: 1rem; /* Adds space above the buttons */
+}

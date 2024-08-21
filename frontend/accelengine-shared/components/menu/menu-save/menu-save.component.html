@@ -1,0 +1,21 @@
+<div *ngIf="save">
+    <button
+        id="btnCancel"
+        pButton
+        pRipple
+        class="p-button-danger mr-2"
+        icon="fa fa-times"
+        label="{{ closeBtnLabel | translate }}"
+        (click)="onCancel()"
+    ></button>
+    <button
+        id="btnSave"
+        pButton
+        pRipple
+        class="p-button-success"
+        icon="fa fa-save"
+        label="{{ saveBtnLabel | translate }}"
+        (click)="onSave()"
+        [disabled]="!isValide"
+    ></button>
+</div>

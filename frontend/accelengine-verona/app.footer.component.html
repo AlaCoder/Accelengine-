@@ -1,0 +1,14 @@
+<div class="layout-footer">
+    <div class="footer-left">
+        <span class="copyright">{{ footerMessage }}</span>
+    </div>
+    <div class="footer-right">
+        <app-menu-save
+            [showSave]="showSave"
+            [isValide]="isValide"
+            [closeBtnLabel]="closeBtnLabel"
+            [saveBtnLabel]="saveBtnLabel"
+            (onSaveClick)="onSaveClick($event)"
+        ></app-menu-save>
+    </div>
+</div>

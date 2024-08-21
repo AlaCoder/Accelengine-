@@ -1,0 +1,147 @@
+<div class="form-popup">
+    <form [formGroup]="criteriaForm">
+        <div class="form p-fluid">
+            <div class="field grid pb-3">
+                <label class="sm:col-3"> Logique du filtre: </label>
+                <div class="sm:col-3">
+                    <p-selectButton
+                        class="p-button-sm"
+                        [options]="logicalNodes"
+                        formControlName="logicalNode"
+                        optionLabel="name"
+                        optionValue="code"
+                    ></p-selectButton>
+                </div>
+            </div>
+            <div
+                class="field grid"
+                *ngFor="let group of getFormControls.controls; let i = index"
+                formArrayName="criteriaData"
+            >
+                <div class="sm:col-3 col-6" [formGroupName]="i">
+                    <p-dropdown
+                        formControlName="field"
+                        [options]="headers"
+                        (onChange)="selectCriteria(i)"
+                        optionLabel="name"
+                        optionValue="code"
+                        [appendTo]="'body'"
+                        [filter]="true"
+                    >
+                    </p-dropdown>
+                </div>
+                <div class="sm:col-3 col-6" [formGroupName]="i">
+                    <p-dropdown
+                        formControlName="operation"
+                        [options]="getOperations(i)"
+                        optionLabel="name"
+                        optionValue="code"
+                        [appendTo]="'body'"
+                        [filter]="false"
+                    ></p-dropdown>
+                </div>
+                <div class="sm:col-4 col-6" [formGroupName]="i">
+                    <app-input-form
+                        *ngIf="group.value.type === 0"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [value]="getCriteriaFormAt(i).value"
+                        [isDisabled]="false"
+                    ></app-input-form>
+                    <app-number-form
+                        *ngIf="group.value.type === 1"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [value]="getCriteriaFormAt(i).value"
+                        [isDisabled]="false"
+                    ></app-number-form>
+                    <!-- à corriger l'initialisation du component-->
+                    <app-dictionary-select
+                        *ngIf="group.value.type === 2"
+                        [typeCode]="group.value.typeCode"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [displayLabel]="false"
+                        [placeholder]="'Indéfini'"
+                        [value]="getCriteriaFormAt(i)"
+                        [returnValue]="'label'"
+                        [displayField]="group.value.displayField"
+                        [isDisabled]="false"
+                        [filter]="true"
+                    ></app-dictionary-select>
+                    <app-date-form
+                        *ngIf="group.value.type === 3"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [value]="getCriteriaFormAt(i).value"
+                        [dateFormat]="group.value.dateFormat"
+                        [isDisabled]="false"
+                    ></app-date-form>
+                    <!-- à corriger l'initialisation du component-->
+                    <!--<div class="field grid" *ngIf="group.value.type === 4">
+                        <p-dropdown [options]="group.value.values" optionLabel="{{group.value.displayField}}" 
+                            formControlName="value" optionValue="{{group.value.returnValue}}">
+                        </p-dropdown>
+                    </div>-->
+                    <app-select-form
+                        *ngIf="group.value.type === 4"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [placeholder]="'Indéfini'"
+                        [values]="group.value.values"
+                        [value]="getCriteriaFormAt(i)"
+                        [displayField]="group.value.displayField"
+                        [dataKey]="group.value.dataKey"
+                        [returnValue]="group.value.returnValue"
+                        [isDisabled]="false"
+                        [filter]="true"
+                    ></app-select-form>
+                    <app-multiselect-form
+                        *ngIf="group.value.type === 5"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [displayField]="group.value.displayField"
+                        [values]="group.value.values"
+                        [name]="'value'"
+                        [value]="getCriteriaFormAt(i)"
+                        [returnValue]="group.value.returnValue"
+                        [placeholder]="'Indéfini'"
+                        [isDisabled]="false"
+                        [filter]="true"
+                    ></app-multiselect-form>
+                    <app-switch-form
+                        *ngIf="group.value.type === 6"
+                        [formGroup]="getCriteriaFormAt(i)"
+                        [name]="'value'"
+                        [label]="group.value.header"
+                        [value]="group.value.value"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="false"
+                    ></app-switch-form>
+                </div>
+                <div class="sm:col-1 col-6" [formGroupName]="i">
+                    <p-button
+                        (click)="addCriteria(i + 1)"
+                        styleClass="action p-button-sm fas fa-plus"
+                    ></p-button>
+                </div>
+                <div class="sm:col-1 col-6" [formGroupName]="i">
+                    <p-button
+                        *ngIf="getFormControls.controls.length !== 1"
+                        (click)="deleteCriteria(i)"
+                        styleClass="action p-button-sm fas fa-minus"
+                    ></p-button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button [label]="'Annuler'" (click)="onCancel()" styleClass="p-button-text"></p-button>
+            <p-button [label]="'Vider les critères'" (click)="onReset()" styleClass="p-button-text">
+            </p-button>
+            <p-button [label]="'Rechercher'" (click)="onSubmit()" styleClass="p-button-text">
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

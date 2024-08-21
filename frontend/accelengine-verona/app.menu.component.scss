@@ -1,0 +1,29 @@
+.filter {
+    border-radius: 0px;
+    box-shadow: none;
+    border: 0px;
+    padding: 10px;
+    width: 100%;
+    height: 30px;
+    background-color: transparent;
+}
+
+input.filter {
+    color: #fff;
+}
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #fff;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #fff;
+}
+
+::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #fff;
+}

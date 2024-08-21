@@ -1,0 +1,18 @@
+:host ::ng-deep .field.grid,
+.formgrid.grid {
+    margin-bottom: -5px;
+}
+
+:host ::ng-deep .p-selectbutton .p-button {
+    padding: 0.5rem 1rem;
+}
+
+:host ::ng-deep .sm\:col-1,
+.sm\:col-3,
+.sm\:col-4 {
+    padding: 2px;
+}
+
+:host ::ng-deep .action {
+    width: 45px;
+}

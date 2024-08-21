@@ -1,0 +1,46 @@
+<span [ngClass]="{ 'p-buttonset': multiple }">
+    <button
+        pButton
+        pRipple
+        *ngIf="isAddOK"
+        [disabled]="isAddDisabled"
+        icon="fa fa-plus fa-lg"
+        [ngClass]="{
+            'border-round': isAddOK && !isEditOK && !isDeleteOK && !isCopyOK
+        }"
+        (click)="add()"
+    ></button>
+    <button
+        pButton
+        pRipple
+        *ngIf="isEditOK"
+        [disabled]="isEditDisabled"
+        icon="fa fa-pen fa-lg"
+        [ngClass]="{
+            'border-round': !isAddOK && isEditOK && !isDeleteOK && !isCopyOK
+        }"
+        (click)="edit()"
+    ></button>
+    <button
+        pButton
+        pRipple
+        *ngIf="isDeleteOK"
+        [disabled]="isDeleteDisabled"
+        icon="fa fa-trash fa-lg"
+        [ngClass]="{
+            'border-round': !isAddOK && !isEditOK && isDeleteOK && !isCopyOK
+        }"
+        (click)="delete()"
+    ></button>
+    <button
+        pButton
+        pRipple
+        *ngIf="isCopyOK"
+        [disabled]="isCopyDisabled"
+        icon="fa fa-copy fa-lg"
+        [ngClass]="{
+            'border-round': !isAddOK && !isEditOK && !isDeleteOK && isCopyOK
+        }"
+        (click)="copy()"
+    ></button>
+</span>

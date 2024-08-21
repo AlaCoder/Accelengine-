@@ -1,0 +1,64 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <div class="p-inputgroup">
+                <span *ngIf="appendCheckBoxRight" class="p-inputgroup-addon">
+                    <p-checkbox
+                        value="{{ name }}"
+                        name="{{ name }}"
+                        (onChange)="onCheckBoxValueChange(name, $event)"
+                    >
+                    </p-checkbox>
+                </span>
+                <span *ngIf="iconLeft" class="p-inputgroup-addon"
+                    ><i class="{{ iconLeft }}"></i
+                ></span>
+                <span *ngIf="appendLeft" class="p-inputgroup-addon">{{
+                    appendLeft
+                }}</span>
+
+                <input
+                    pInputText
+                    type="{{ type }}"
+                    formControlName="{{ name }}"
+                    id="{{ name }}"
+                    name="{{ name }}"
+                    [value]="getValue(value)"
+                    [ngClass]="{
+                        'ng-dirty ng-invalid': isSubmitted && getErrors()
+                    }"
+                    placeholder="{{ placeholder | translate }}"
+                    [attr.disabled]="isDisabled ? '' : null"
+                    [autocomplete]="autocomplete ? 'on' : 'off'"
+                    (ngModelChange)="onValueChange($event)"
+                />
+
+                <span *ngIf="iconRight" class="p-inputgroup-addon"
+                    ><i class="{{ iconRight }}"></i
+                ></span>
+                <span *ngIf="appendRight" class="p-inputgroup-addon">{{
+                    appendRight
+                }}</span>
+            </div>
+            <small>{{ help | translate }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

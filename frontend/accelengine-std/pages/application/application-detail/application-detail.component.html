@@ -1,0 +1,178 @@
+<div class="grid">
+    <div class="col-12">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Application</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [showResiz]="false"
+                            [types]="'e'"
+                            (editClick)="onEditClick()"
+                        ></app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <div class="grid p-2">
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h5>Information application</h5>
+                                <div class="p-fluid">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'code'"
+                                        [label]="'Code'"
+                                        [value]="f.code"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'name'"
+                                        [label]="'Nom'"
+                                        [value]="f.name"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-textarea-form
+                                        [formGroup]="formGroup"
+                                        [name]="'description'"
+                                        [label]="'Description'"
+                                        [value]="f.description"
+                                        [rows]="4"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-textarea-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'version'"
+                                        [label]="'Version'"
+                                        [value]="f.version"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-date-form
+                                        *ngIf="isDevMode"
+                                        [formGroup]="formGroup"
+                                        [name]="'expirationDate'"
+                                        [label]="
+                                            'Date d\'expiration de l\'application'
+                                        "
+                                        [value]="f.expirationDate"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-date-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'machineId'"
+                                        [label]="'Machine ID'"
+                                        [value]="f.machineId"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-switch-form
+                                        [formGroup]="formGroup"
+                                        [name]="'activateMultitenancy'"
+                                        [label]="'Activer les multitenants'"
+                                        [value]="f.activateMultitenancy"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-switch-form>
+                                    <app-switch-form
+                                        [formGroup]="formGroup"
+                                        [name]="'activateMaintenance'"
+                                        [label]="'Activer la maintenance'"
+                                        [value]="f.activateMaintenance"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-switch-form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="card">
+                                <h3>Base de données</h3>
+                                <div class="p-fluid">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'databaseName'"
+                                        [label]="'Nom de la DB'"
+                                        [value]="f.databaseName"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'databaseVersion'"
+                                        [label]="'Version de la DB'"
+                                        [value]="f.databaseVersion"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'databaseURL'"
+                                        [label]="'URL de la DB'"
+                                        [value]="f.databaseURL"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'driverName'"
+                                        [label]="'Nom du pilote'"
+                                        [value]="f.driverName"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'driverVersion'"
+                                        [label]="'Version du pilote'"
+                                        [value]="f.driverVersion"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid p-2">
+                        <div class="col-12 md:col-6">
+                            <h3>{{ "label.publicKey" | translate }}</h3>
+                            <app-input-textarea-form
+                                [formGroup]="formGroup"
+                                [name]="'publicKey'"
+                                label="{{ 'label.publicKey' | translate }}"
+                                [value]="f.publicKey"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-input-textarea-form>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

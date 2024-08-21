@@ -1,0 +1,27 @@
+<app-menu-crud
+    class="pr-1"
+    *ngIf="showCrud"
+    [types]="types"
+    [isAddDisabled]="isAddDisabled"
+    [isEditDisabled]="isEditDisabled"
+    [isDeleteDisabled]="isDeleteDisabled"
+    [isCopyDisabled]="isCopyDisabled"
+    (editClick)="onEditClick()"
+    (deleteClick)="onDeleteClick()"
+    (copyClick)="onCopyClick()"
+>
+</app-menu-crud>
+<span class="p-buttonset" *ngIf="showResiz">
+    <button
+        pButton
+        pRipple
+        icon="{{ maximizeIcon }}"
+        (click)="maximize()"
+    ></button>
+    <button
+        pButton
+        pRipple
+        icon="fa fa-times fa-lg"
+        (click)="close()"
+    ></button>
+</span>

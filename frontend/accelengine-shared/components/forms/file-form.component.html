@@ -1,0 +1,23 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="p-field grid">
+        <p-fileUpload
+            class="col-12 md:col-12"
+            id="{{ name }}"
+            name="{{ name }}"
+            chooseLabel="{{ label }}"
+            [showUploadButton]="false"
+            [showCancelButton]="false"
+            (onRemove)="onRemove($event)"
+            (onSelect)="onFileChange($event)"
+            accept="{{ allowedType }}"
+            [ngClass]="{ 'ng-dirty ng-invalid': isSubmitted && getErrors() }"
+            [disabled]="isDisabled"
+        >
+        </p-fileUpload>
+        <app-validation-form
+            *ngIf="isSubmitted && getErrors()"
+            [value]="value"
+            class="invalid-feedback"
+        ></app-validation-form>
+    </div>
+</div>

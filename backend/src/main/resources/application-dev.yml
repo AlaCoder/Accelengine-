@@ -1,0 +1,42 @@
+# ===================================================================
+# Standard Spring Boot properties
+# ===================================================================
+spring:
+    output:
+        ansi:
+            enabled: ALWAYS
+    profile: dev
+    # Database
+    datasource:
+        platform: postgres
+        url: jdbc:postgresql://127.0.0.1:5432/accelengine
+        username: postgres
+        password: admin123
+        driver-class-name: org.postgresql.Driver
+    # JPA properties
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        open-in-view: false
+        generate-ddl: false
+    liquibase:
+        enabled: true
+logging:
+    file:
+        path: C:\DATA\logs\${application.name}\dev
+        name: ${logging.file.path}\dev_app.log
+    pattern:
+        console: "%d %-5level [%thread] %logger : %msg%n"
+        file: "%d %-5level [%thread] %logger : %msg%n"
+    level:
+        org.springframework.web: WARN
+        org.springframework.transaction.interceptor: TRACE
+        guru.springframework.controllers: WARN
+        org.hibernate: WARN
+        org.hibernate.transaction: DEBUG
+
+server:
+    port: 9191

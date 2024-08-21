@@ -1,0 +1,16 @@
+<form [formGroup]="formGroup">
+    <div class="margin ">
+        <img class="widthImg height" #imgFromHtml src="{{ urlImage }}" alt="" />
+    </div>
+    <div class="">
+        <app-file-form class="widthFile"
+            [formGroup]="formGroup"
+            [name]="'img'"
+            [label]="'Choisir un fichier'"
+            [value]="f.img"
+            [accept]="'image/*'"
+            (change)="OnchangePhoto(imgFromHtml)"
+        >
+        </app-file-form>
+    </div>
+</form>

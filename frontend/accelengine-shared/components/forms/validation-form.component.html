@@ -1,0 +1,98 @@
+<div *ngIf="displayErreur" style="color: #f44336; padding-left: 0.5rem">
+    <small *ngIf="erreur.required">
+        {{ "messages.validation_required" | translate }}
+    </small>
+    <small *ngIf="erreur.email">{{
+        "messages.validation_email" | translate
+    }}</small>
+    <small *ngIf="erreur.minlength">{{
+        "messages.validation_minlength"
+            | translate: { value: erreur.minlength.requiredLength }
+    }}</small>
+    <small *ngIf="erreur.maxlength">{{
+        "messages.validation_maxlength"
+            | translate: { value: erreur.maxlength.requiredLength }
+    }}</small>
+    <small *ngIf="erreur.min">{{
+        "messages.validation_min" | translate: { value: erreur.min.min }
+    }}</small>
+    <small *ngIf="erreur.max">{{
+        "messages.validation_max" | translate: { value: erreur.max.max }
+    }}</small>
+    <small *ngIf="erreur.equal">{{
+        "messages.validation_equal"
+            | translate
+                : {
+                      value1: erreur.equal.value1,
+                      value2: erreur.equal.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.notEqual">{{
+        "messages.validation_notEqual"
+            | translate
+                : {
+                      value1: erreur.notEqual.value1,
+                      value2: erreur.notEqual.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.mustGreaterThan">{{
+        "messages.validation_mustGreaterThan"
+            | translate
+                : {
+                      value1: erreur.mustGreaterThan.value1,
+                      value2: erreur.mustGreaterThan.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.mustGreaterOrEqualThan">{{
+        "messages.validation_mustGreaterOrEqualThan"
+            | translate
+                : {
+                      value1: erreur.mustGreaterOrEqualThan.value1,
+                      value2: erreur.mustGreaterOrEqualThan.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.mustLessThan">{{
+        "messages.validation_mustLessThan"
+            | translate
+                : {
+                      value1: erreur.mustLessThan.value1,
+                      value2: erreur.mustLessThan.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.mustLessOrEqualThan">{{
+        "messages.validation_mustLessOrEqualThan"
+            | translate
+                : {
+                      value1: erreur.mustLessOrEqualThan.value1,
+                      value2: erreur.mustLessOrEqualThan.value2
+                  }
+    }}</small>
+    <small *ngIf="erreur.mustMatch">{{
+        "messages.validation_mustMatch" | translate
+    }}</small>
+    <small *ngIf="erreur.customized1">{{
+        "messages.validation.customized1"
+            | translate
+                : {
+                      value: erreur.customized1.value
+                  }
+    }}</small>
+    <small *ngIf="erreur.customized2">{{
+        "messages.validation_customized2"
+            | translate
+                : {
+                      value: erreur.customized2.value
+                  }
+    }}</small>
+    <small *ngIf="erreur.customized3">{{
+        "messages.validation_customized3"
+            | translate
+                : {
+                      value: erreur.customized3.value
+                  }
+    }}</small>
+    <small *ngIf="erreur.pattern">{{
+        "messages.validation_pattern"
+            | translate: { value: erreur.pattern.requiredPattern }
+    }}</small>
+</div>

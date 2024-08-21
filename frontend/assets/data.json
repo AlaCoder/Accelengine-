@@ -1,0 +1,54 @@
+{
+    "application": {
+        "code": "MINIMES",
+        "name": "AZUR MES",
+        "description": "MES pour le client AZUR",
+        "version": "0.0.1",
+        "databaseName": "string",
+        "databaseVersion": "string",
+        "databaseURL": "string",
+        "driverName": "string"
+    },
+    "users": [
+        {
+            "id": 1,
+            "username": "admin@admin.com",
+            "password": "admin123",
+            "email": "admin@admin.com",
+            "token": "fake-jwt-token",
+            "profile": {
+                "firstname": "firstName",
+                "lastname": "lastName"
+            }
+        }
+    ],
+    "topmenus": {
+    },
+    "menus": {
+        "datas": [
+            {
+                "code": "1",
+                "parentCode": "0",
+                "label": "Menu 1",
+                "url": "/url",
+                "icon": "fas fa-box-open",
+                "menus": [
+                    {
+                        "code": "1.1",
+                        "parentCode": "1",
+                        "label": "subMenu 1",
+                        "url": "/url/1",
+                        "icon": "fas fa-cubes"
+                    },
+                    {
+                        "code": "1.2",
+                        "parentCode": "1",
+                        "label": "subMenu 2",
+                        "url": "/url/2",
+                        "icon": "fas fa-grip-horizontal"
+                    }
+                ]
+            }
+        ]
+    }
+}

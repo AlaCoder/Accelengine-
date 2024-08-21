@@ -1,0 +1,22 @@
+<div class="layout-sidebar" (click)="onMenuClick()">
+    <input
+        type="text"
+        id="filter"
+        name="filter"
+        class="form-control filter"
+        placeholder="Recherche dans le menu"
+        [(ngModel)]="searchMenu"
+        (ngModelChange)="onFilterChanged()"
+    />
+    <div class="layout-menu-container">
+        <ul class="layout-menu">
+            <li
+                app-menuitem
+                *ngFor="let item of filtredMenus; let i = index"
+                [item]="item"
+                [index]="i"
+                [root]="true"
+            ></li>
+        </ul>
+    </div>
+</div>

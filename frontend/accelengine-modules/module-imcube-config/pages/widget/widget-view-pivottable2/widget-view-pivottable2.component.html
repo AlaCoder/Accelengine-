@@ -1,0 +1,46 @@
+<p-treeTable
+    [value]="currentDatas"
+    [columns]="frozenCols"
+    styleClass="p-treetable-sm p-datatable-gridlines"
+    (onNodeExpand)="onNodeExpand($event)"
+>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" style="width: 200px" />
+        </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th [attr.rowspan]="getRowspan()"></th>
+            <th
+                [style.width.px]="currentWidget.pivotHeaderNiv2.length * 80"
+                *ngFor="let colHeaderNiv1 of currentWidget.pivotHeaderNiv1"
+                [attr.colspan]="currentWidget.pivotHeaderNiv2.length"
+            >
+                {{ colHeaderNiv1 }}
+            </th>
+        </tr>
+        <tr>
+            <th *ngFor="let colHeaderNiv2 of pivotHeaderNiv2">
+                {{ colHeaderNiv2 }}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template
+        pTemplate="body"
+        let-rowNode
+        let-rowData="rowData"
+    >
+        <tr>
+            <td *ngFor="let key of keys; let i = index">
+                <p-treeTableToggler
+                    [rowNode]="rowNode"
+                    *ngIf="i == 0"
+                ></p-treeTableToggler>
+                {{ getRowData(rowData, key) }}
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>

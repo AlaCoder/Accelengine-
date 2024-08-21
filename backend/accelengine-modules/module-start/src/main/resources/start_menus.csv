@@ -1,0 +1,6 @@
+code;parent_code;menu_code;url;icon;display;topMenu;modules
+70;7;menu.start;/start;fa fa-cube;true;false;START
+70.1;70;menu.fathers;/start/father/a/list;fas fa-boxes;true;false;START
+70.1.1;70;menu.father;/start/father/a/add;fas fa-add;true;false;START
+70.20;70;TEST1;/start/test1;fas fa-boxes;true;false;A&B
+70.30;70;TEST2;/start/test2;fas fa-boxes;true;false;B|C

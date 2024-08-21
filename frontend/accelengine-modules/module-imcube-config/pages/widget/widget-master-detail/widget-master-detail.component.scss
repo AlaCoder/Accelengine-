@@ -1,0 +1,93 @@
+:host ::ng-deep .col {
+    padding: 5px;
+}
+
+:host ::ng-deep .col-metadata {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+:host ::ng-deep .col-main {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 400px;
+    padding: 15px;
+    width: 0px;
+}
+
+:host ::ng-deep .dropzone {
+    padding: 0px;
+}
+
+:host ::ng-deep .p-splitter {
+    border: 0px;
+}
+
+:host ::ng-deep .p-splitter .p-splitter-gutter {
+    background: none;
+}
+
+.column-to-select {
+    height: 34px;
+    line-height: 20px;
+    width: 100%;
+    display: block;
+    background-color: #fff;
+    outline: 0;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+:host ::ng-deep .p-accordion .p-accordion-header .p-accordion-header-link {
+    padding: 10px;
+}
+
+:host ::ng-deep .p-accordion .p-accordion-content {
+    padding: 5px;
+}
+
+:host ::ng-deep .columns-card {
+    margin-bottom: 10px;
+    padding: 5px 5px 3px 10px;
+}
+
+.columns-list {
+    min-height: 45px;
+}
+
+.selected-column {
+    border: 1px solid var(--surface-d);
+    padding: 4px 0px 4px 15px;
+    display: inline-block;
+    margin-top: 10px;
+    height: 35px;
+    margin-right: 5px;
+}
+
+.action-bottom {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dndPlaceholder {
+    border: 1px dashed var(--green-500);
+    background: #eff3f8;
+    padding: 4px 15px;
+    height: 30px;
+}
+
+:host ::ng-deep .grid-button {
+    padding: 5px;
+    .col-12 {
+        padding: 5px 5px 5px 5px;
+    }
+}
+
+:host ::ng-deep .p-accordion {
+    width: 250px;
+    .p-accordion-header-text {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

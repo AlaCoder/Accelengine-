@@ -1,0 +1,59 @@
+<div class="table-responsive" *ngIf="!updating && cacheMetrics">
+    <table style="width: 100%">
+        <thead>
+            <tr>
+                <th>Cache name</th>
+                <th class="text-right">Cache Hits</th>
+                <th class="text-right">Cache Misses</th>
+                <th class="text-right">Cache Gets</th>
+                <th class="text-right">Cache Puts</th>
+                <th class="text-right">Cache Removals</th>
+                <th class="text-right">Cache Evictions</th>
+                <th class="text-right">Cache Hit %</th>
+                <th class="">Cache Miss %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let entry of cacheMetrics | keyvalue">
+                <td>{{ entry.key }}</td>
+                <td class="text-right">
+                    {{ entry.value["cache.gets.hit"] }}
+                </td>
+                <td class="text-right">
+                    {{ entry.value["cache.gets.miss"] }}
+                </td>
+                <td class="text-right">
+                    {{
+                        entry.value["cache.gets.hit"] +
+                            entry.value["cache.gets.miss"]
+                    }}
+                </td>
+                <td class="text-right">{{ entry.value["cache.puts"] }}</td>
+                <td class="text-right">
+                    {{ entry.value["cache.removals"] }}
+                </td>
+                <td class="text-right">
+                    {{ entry.value["cache.evictions"] }}
+                </td>
+                <td class="text-right">
+                    {{
+                        filterNaN(
+                            (100 * entry.value["cache.gets.hit"]) /
+                                (entry.value["cache.gets.hit"] +
+                                    entry.value["cache.gets.miss"])
+                        ) | number: "1.0-4"
+                    }}
+                </td>
+                <td class="text-right">
+                    {{
+                        filterNaN(
+                            (100 * entry.value["cache.gets.miss"]) /
+                                (entry.value["cache.gets.hit"] +
+                                    entry.value["cache.gets.miss"])
+                        ) | number: "1.0-4"
+                    }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

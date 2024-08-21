@@ -1,0 +1,7 @@
+:host ::ng-deep .p-listbox {
+    width: 100% !important;
+}
+
+:host ::ng-deep .main-listbox {
+    height: calc(100% - 70px);
+}

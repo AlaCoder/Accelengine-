@@ -1,0 +1,17 @@
+<form [formGroup]="formGroup">
+    <div *ngIf="idFile" class="margin">
+        <img class="widthImg height" src="{{ urlImage }}" alt="" />
+    </div>
+    <div class="">
+        <app-file-form class="widthFile"
+            [formGroup]="formGroup"
+            [name]="'img'"
+            [label]="'Choisir un fichier'"
+            [value]="f.img"
+            [allowedType]="allowedType"
+            [isDisabled]="isDisabled"
+            (change)="onChangeImage()"
+        >
+        </app-file-form>
+    </div>
+</form>

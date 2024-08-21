@@ -1,0 +1,370 @@
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+
+.col-12 {
+    padding: 5px;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    padding: 0.8rem 0.8rem;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.5rem;
+}
+
+.field.grid,
+.formgrid.grid {
+    margin-top: 0;
+    margin-bottom: -10px;
+}
+
+.p-inputtext,
+.p-inputgroup-addon {
+    padding: 0.5rem 0.5rem;
+}
+
+.p-calendar .p-button.p-button-icon-only {
+    padding: 0.5rem 0;
+}
+
+.layout-topbar
+    .layout-topbar-right
+    .layout-topbar-actions
+    > li.profile-item
+    .profile-container
+    .name-container {
+    padding: 0.2rem 1rem;
+    font-size: 12px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    min-width: 2rem;
+    height: 2rem;
+}
+
+.p-paginator .p-dropdown {
+    height: 2.5rem;
+}
+
+// MENU
+
+@media screen and (min-width: 992px) {
+    .layout-sidebar {
+        width: 250px;
+    }
+
+    .layout-wrapper.layout-static .layout-content-wrapper {
+        margin-left: 250px;
+    }
+
+    .layout-wrapper .layout-content-wrapper {
+        width: calc(100% - 250px);
+    }
+
+    .layout-wrapper.layout-static-inactive .layout-content-wrapper {
+        margin-left: 3rem;
+    }
+}
+
+// TOPBAR
+.layout-topbar
+    .layout-topbar-right
+    .layout-topbar-actions
+    > li.active-topmenuitem.profile-item
+    i {
+    transform: rotate(0deg);
+}
+
+// LAYOUT
+.layout-topbar {
+    height: 50px !important;
+}
+
+.layout-topbar
+    .layout-topbar-right
+    .layout-topbar-actions
+    > li.profile-item
+    .profile-container
+    a {
+    font-size: 1rem;
+    padding: 0.7rem 0.5rem;
+}
+
+.layout-topbar .layout-topbar-right .layout-topbar-actions > li.search-item a {
+    padding: 7px;
+    width: 33px;
+    height: 35px;
+}
+
+.layout-topbar
+    .layout-topbar-right
+    .layout-topbar-actions
+    > li.profile-item
+    .profile-container
+    i {
+    font-size: 1rem;
+    padding: 0.8rem;
+}
+
+.layout-topbar {
+    padding: 0 1.25rem;
+    .layout-topbar-right .layout-topbar-actions > li.search-item a i {
+        font-size: 18px;
+    }
+}
+
+.layout-topbar .layout-topbar-right .layout-topbar-actions > li.profile-item {
+    margin-left: 1rem;
+}
+
+.layout-topbar .layout-topbar-right .layout-topbar-actions > li > ul {
+    top: 50px;
+}
+
+@media screen and (min-width: 992px) {
+    .layout-wrapper .layout-content-wrapper {
+        margin-top: 50px;
+    }
+}
+
+.layout-wrapper .layout-content-wrapper .layout-content {
+    padding: 15px;
+}
+
+.layout-wrapper .layout-content-wrapper {
+    overflow-x: hidden;
+}
+
+@media screen and (min-width: 991px) {
+    .layout-wrapper .layout-content-wrapper {
+        height: calc(100% - 50px);
+    }
+
+    .layout-wrapper .layout-content-wrapper .layout-content {
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+
+    .layout-wrapper .layout-content-wrapper {
+        border-top-left-radius: 10px;
+    }
+}
+
+.layout-footer {
+    padding: 0px 20px 0px 0px;
+    min-height: 45px;
+
+    .copyright {
+        padding-left: 20px;
+    }
+
+    .footer-right span {
+        display: block;
+        margin-top: 0px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .layout-footer {
+        .copyright {
+            display: none;
+        }
+
+        .footer-right {
+            width: 100%;
+            padding-left: 10px;
+        }
+    }
+
+    .layout-wrapper .layout-topbar .layout-topbar-left .menu-button {
+        width: 70px;
+        height: 70px;
+    }
+
+    .layout-wrapper
+        .layout-topbar
+        .layout-topbar-left
+        .menu-button
+        .menu-button-icon {
+        top: 35px;
+        left: 25px;
+    }
+}
+
+// MENU
+.layout-sidebar {
+    top: 70px;
+    height: calc(100% - 70px);
+    display: grid;
+    align-content: baseline;
+}
+
+.layout-sidebar .layout-menu-container {
+    padding: 10px;
+}
+
+.layout-sidebar .layout-menu-container .layout-menu ul ul li a {
+    padding-left: 10px;
+}
+
+.p-toolbar {
+    padding: 1px;
+    height: 45px;
+}
+
+.topbar-icon-item {
+    padding-left: 10px;
+}
+
+// CARD
+
+.p-card .p-card-title {
+    padding: 10px;
+}
+
+.p-card .p-card-body {
+    padding: 0;
+}
+
+.p-card .p-card-content {
+    padding: 1px 0;
+}
+
+.p-toolbar-group-left h4 {
+    padding: 0px;
+    margin: 5px;
+}
+
+@media screen and (min-width: 767px) {
+    .main-body {
+        height: calc(100vh - 167px);
+        overflow-y: auto; /* Hide vertical scrollbar */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .main-body {
+        height: calc(100vh - 177px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+.main-body {
+    padding: 3px;
+}
+
+.main-child-body {
+    padding-top: 3px;
+}
+
+// DATATABLE
+.p-datatable .p-datatable-header {
+    padding: 5px;
+}
+
+.p-datatable .p-datatable-thead > tr.filter > th {
+    padding: 1px;
+    height: 35px;
+    input {
+        width: 100%;
+        border-radius: 0px;
+        padding: 5px;
+        height: 30px;
+    }
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    .p-button {
+        margin: -0.5em;
+    }
+}
+
+.d-none {
+    display: none;
+}
+
+// TABVIEW
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 10px;
+}
+
+.p-tabview .p-tabview-panels {
+    padding: 3px;
+}
+
+// PROGRESSBAR
+.content-progressBar > .p-progressbar,
+.p-progressbar-non {
+    height: 6px;
+}
+
+// INPUT
+.form {
+    padding: 0 0 0 15px;
+    .input {
+        padding: 0 15px 15px 0 !important;
+    }
+}
+
+.required:after {
+    content: "*";
+    color: #ff4136;
+}
+
+.field {
+    margin-bottom: 0px;
+}
+
+// POPUP
+.form-popup .p-toolbar {
+    background: #fff;
+    border: none;
+}
+
+.p-dialog {
+    .p-dialog-header {
+        padding: 15px;
+    }
+
+    .p-dialog-content {
+        padding: 0 15px 10px 15px;
+    }
+}
+
+.grid-no-margin {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #d3d3d3;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #d3d3d3;
+    border-radius: 5px;
+}
+
+// Splash loader
+.splash-screen .splash-loader > div:before {
+    background-color: #ffffff;
+}
+
+.text-bold {
+    font-weight: bold;
+    text-align: left;
+}

@@ -1,0 +1,60 @@
+<div class="grid">
+    <div class="col-10"></div>
+    <div class="col-2" *ngIf="displayRedirect">
+        <app-redirect
+            *ngIf="currentWorkflow && currentWorkflow.id"
+            [url]="'/workflow/workflowconfig'"
+            [id]="currentWorkflow?.id"
+            [label]="'workflow'"
+            [icon]="'pi pi-arrow-up-right'"
+            [class]="'p-button-warning'"
+            [newWindow]="false"
+        >
+        </app-redirect>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-12">
+        <form [formGroup]="formGroup">
+            <app-input-form
+                [formGroup]="formGroup"
+                [name]="'detailsNewStatus'"
+                [label]="'Statut courant'"
+                [placeholder]="'Indéfini'"
+                [value]="f.detailsNewStatus"
+                [isSubmitted]="isSubmitted"
+                [isDisabled]="true"
+            >
+            </app-input-form>
+            <app-select-form
+                [formGroup]="formGroup"
+                [name]="'newStatus'"
+                [label]="'Nouveau statut'"
+                [placeholder]="'Indéfini'"
+                [values]="transitions"
+                [value]="f.newStatus"
+                [displayField]="'toStatus.label'"
+                [isSubmitted]="isSubmitted"
+                [returnValue]="'toStatus'"
+                [filter]="false"
+                [isDisabled]="!isEdit"
+                [isSubmitted]="isSubmitted"
+                (onChange)="statusChanged($event)"
+            >
+            </app-select-form>
+            <app-input-textarea-form
+                *ngIf="showDescription"
+                [formGroup]="formGroup"
+                [name]="'descriptionTransition'"
+                [label]="'Commentaire'"
+                [placeholder]="'Indéfini'"
+                [rows]="3"
+                [value]="f.descriptionTransition"
+                [isSubmitted]="isSubmitted"
+                (onChange)="changeComment($event)"
+            >
+            </app-input-textarea-form>
+        </form>
+    </div>
+</div>

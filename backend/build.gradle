@@ -1,0 +1,217 @@
+    buildscript {
+    ext {
+        springBootVersion = '2.5.2'
+        springManagementVersion = '1.0.11.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+        classpath "io.spring.gradle:dependency-management-plugin:${springManagementVersion}"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version "${springManagementVersion}"
+    id 'war'
+    id 'maven-publish'
+    id "org.sonarqube" version "3.3"
+}
+
+
+
+group = 'tn.accelengine'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        credentials {
+            username nexusUser
+            password nexusPassword
+        }
+        url nexusRepository + '/repository/maven-public/'
+        allowInsecureProtocol = true
+    }
+}
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'maven-publish'
+    apply plugin: 'org.sonarqube'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+
+    bootJar {
+        enabled = false
+    }
+
+    bootWar {
+        enabled = false
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            credentials {
+                username nexusUser
+                password nexusPassword
+            }
+            url nexusRepository + '/repository/maven-public/'
+            allowInsecureProtocol = true
+        }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+            mavenBom "org.junit:junit-bom:5.5.2"
+        }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.0.Final'
+        //Must be defined before the lombok annotationProcessor
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+    	implementation 'tn.accelengine:accelengine-core:' + coreVersion
+
+
+  }
+
+    afterEvaluate {
+        project ->
+            publishing {
+                publications {
+                    maven(MavenPublication) {
+                        group = 'tn.pfe'
+                        from components.java
+                    }
+                }
+                repositories {
+                    maven {
+                        credentials {
+                            username nexusUser
+                            password nexusPassword
+                        }
+                        def branch = project.property('branch')
+                        if (branch=="develop" || branch=="master") {
+                            if (branch=="develop") {
+                                url nexusRepository + "/repository/maven-develop/"
+                            }  else {
+                                url nexusRepository + "/repository/maven-releases/"
+                            }
+                        }
+                        else {
+                            throw new GradleException("YOU HAVE TO BE ON MASTER OR DEVELOP BRANCH")
+                        }
+			println url
+                        allowInsecureProtocol = true
+                    }
+                }
+            }
+    }
+}
+
+dependencies {
+    // CORE + Modules
+    implementation 'tn.accelengine:accelengine-core:' + coreVersion
+    implementation project(':backend:accelengine-modules:module-start')
+    implementation project(':backend:accelengine-modules:module-installer')
+    implementation project(':backend:accelengine-modules:module-logs')
+
+    // Libs
+    implementation 'org.postgresql:postgresql:42.2.8'
+}
+
+bootRun {
+    jvmArgs = ["-agentlib:jdwp=transport=dt_socket,server=y,address=127.0.0.1:8000,suspend=n"]
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+//------------------------------------------------------------------
+//    Tasks - Standalone backend
+//------------------------------------------------------------------
+
+task bootAccelengineBackend {
+    group 'accelengine-run'
+    dependsOn bootRun
+}
+
+task buildAccelengineWar(type: War) {
+    group 'accelengine-build'
+    description = 'Assembles a war with all dependencies'
+    archiveName = 'ga.war'
+    with war
+    duplicatesStrategy = 'exclude'
+}
+
+task buildAccelengineJar(type: Jar) {
+    group 'accelengine-build'
+    description = 'Assembles a jar with all dependencies'
+    archiveName = 'ga.jar'
+    with bootJar
+    duplicatesStrategy = 'exclude'
+}
+
+//jar.dependsOn ':frontend:buildFrontendToSpring'
+//war.dependsOn ':frontend:buildFrontendToSpring'
+
+afterEvaluate {
+    project ->
+
+        publishing {
+            publications {
+                maven(MavenPublication) {
+                    group = 'tn.pfe'
+                    from components.java
+                }
+            }
+
+            repositories {
+                maven {
+                    credentials {
+                        username nexusUser
+                        password nexusPassword
+                    }
+
+                    def branch = project.property('branch')
+                    if (branch=="develop" || branch=="master") {
+                        if (branch=="develop") {
+                            url nexusRepository + "/repository/maven-develop/"
+                        }  else {
+                            url nexusRepository + "/repository/maven-releases/"
+                        }
+                    }
+                    else {
+                        throw new GradleException("YOU HAVE TO BE ON MASTER OR DEVELOP BRANCH")
+                    }
+                    println url
+                    allowInsecureProtocol = true
+                }
+            }
+        }
+}

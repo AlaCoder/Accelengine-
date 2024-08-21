@@ -1,0 +1,33 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{collabel}}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != '' ? 'input col-12 md:col-'+ colcomponent : 'input col-12'
+            "
+        >
+            <p-radioButton
+                formControlName="{{ name }}"
+                inputId="{{ name }}"
+                name="{{ name }}"
+                value="{{ valueRB }}"
+                [ngClass]="{ 'is-invalid': isSubmitted && getErrors() }"
+                [disabled]="isDisabled"
+                (onChange)="onValueChange($event)"
+            ></p-radioButton>
+
+            <small>{{ help }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

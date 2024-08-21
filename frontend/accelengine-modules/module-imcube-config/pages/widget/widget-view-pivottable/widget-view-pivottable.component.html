@@ -1,0 +1,30 @@
+<p-treeTable
+    [value]="currentDatas"
+    [columns]="currentWidget.sortColumns"
+    styleClass="p-treetable-sm"
+    (onNodeExpand)="onNodeExpand($event)"
+>
+    <ng-template pTemplate="header" let-columns>
+        <tr [ttRow]="rowNode">
+            <th *ngFor="let col of columns">
+                {{ col.name }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template
+        pTemplate="body"
+        let-rowNode
+        let-rowData="rowData"
+        let-columns="columns"
+    >
+        <tr>
+            <td *ngFor="let col of columns; let i = index">
+                <p-treeTableToggler
+                    [rowNode]="rowNode"
+                    *ngIf="i == 0"
+                ></p-treeTableToggler>
+                {{ getRowData(rowData, col) }}
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>

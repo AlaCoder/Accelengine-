@@ -1,0 +1,43 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{ collabel }}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != ''
+                    ? 'input col-12 md:col-' + colcomponent
+                    : 'input col-12'
+            "
+        >
+            <p-treeSelect
+                formControlName="{{ name }}"
+                [inputId]="name"
+                [ngClass]="{
+                    'ng-invalid ng-dirty': isSubmitted && getErrors()
+                }"
+                [options]="values"
+                [display]="display"
+                [metaKeySelection]="metaKeySelection"
+                [selectionMode]="selectionMode"
+                placeholder="{{ placeholder | translate }}"
+                [scrollHeight]="scrollHeight"
+                [disabled]="isDisabled"
+                [appendTo]="'body'"
+                (onNodeSelect)="nodeSelect($event)"
+                (onNodeUnselect)="nodeUnselect($event)"
+                (ngModelChange)="onValueChange($event)"
+            ></p-treeSelect>
+            <small>{{ help }}</small>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

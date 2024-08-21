@@ -1,0 +1,56 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-input-form
+            [formGroup]="formGroup"
+            [name]="'code'"
+            [label]="'Code'"
+            [value]="f.code"
+            [isSubmitted]="isSubmitted"
+            [isDisabled]=""
+        >
+        </app-input-form>
+        <app-input-form
+            [formGroup]="formGroup"
+            [name]="'label'"
+            [label]="'Label'"
+            [value]="f.label"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-input-form>
+        <app-number-form
+            *ngIf="isPriorityBol"
+            [formGroup]="formGroup"
+            [name]="'priorityLevel'"
+            [label]="'Priorité'"
+            [value]="f.priorityLevel"
+            [min]="0"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-number-form>
+        <app-color-form
+            [formGroup]="formGroup"
+            [name]="'color'"
+            [label]="'Couleur'"
+            [value]="f.color"
+            [colors]="colors"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-color-form>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

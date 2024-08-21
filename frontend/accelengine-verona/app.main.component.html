@@ -1,0 +1,39 @@
+<p-blockUI [blocked]="blocked">
+    <div class="text-center p-blockui-document">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+</p-blockUI>
+<div
+    class="layout-wrapper"
+    [ngClass]="{
+        'layout-slim': app_config.theme.menuMode === 'slim',
+        'layout-static': app_config.theme.menuMode === 'static',
+        'layout-mobile-active': staticMenuMobileActive,
+        'layout-static-inactive':
+            staticMenuDesktopInactive && app_config.theme.menuMode === 'static',
+        'p-input-filled': app_config.theme.inputStyle === 'filled',
+        'p-ripple-disabled': !app.ripple,
+        'blocked-ui': blocked
+    }"
+    (click)="onLayoutClick()"
+>
+    <app-topbar></app-topbar>
+
+    <app-menu></app-menu>
+
+    <div class="layout-content-wrapper">
+        <div class="layout-content">
+            <p-progressBar
+                *ngIf="loading"
+                mode="indeterminate"
+                class="content-progressBar"
+            ></p-progressBar>
+            <div *ngIf="!loading" class="p-progressbar-non"></div>
+            <p-toast position="top-center"></p-toast>
+            <p-confirmDialog [appendTo]="'body'"></p-confirmDialog>
+            <router-outlet></router-outlet>
+        </div>
+        <!--<app-config></app-config>-->
+        <app-footer></app-footer>
+    </div>
+</div>

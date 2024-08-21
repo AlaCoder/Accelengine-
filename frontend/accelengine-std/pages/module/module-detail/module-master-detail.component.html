@@ -1,0 +1,190 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>{{
+                                "std.master_modules_list" | translate
+                            }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="true"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        >
+                        </app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'job-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Module {{ f.name.value }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel
+                            header="{{ 'std.header_module' | translate }}"
+                        >
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'std.label_code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'name'"
+                                [label]="'std.label_name'"
+                                [value]="f.name"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'type'"
+                                [label]="'type'"
+                                [placeholder]="'Indéfini'"
+                                [value]="f.type"
+                                [values]="module_type_list"
+                                [displayField]="'label'"
+                                [returnValue]="'code'"
+                                [dataKey]="''"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-select-form>
+                            <app-input-textarea-form
+                                [formGroup]="formGroup"
+                                [name]="'stringLicense'"
+                                [label]="'std.label_licence'"
+                                [value]="f.stringLicense"
+                                [rows]="5"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-textarea-form>
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'expired'"
+                                [label]="'Expired'"
+                                [value]="f.expired"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="true"
+                            >
+                            </app-switch-form>
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'activate'"
+                                [label]="'std.label_active'"
+                                [value]="f.activate"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-switch-form>
+                        </p-tabPanel>
+
+                        <p-tabPanel
+                            header="{{ 'std.header_settings' | translate }}"
+                        >
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong>
+                                            {{
+                                                "std.detail_settings_list"
+                                                    | translate
+                                            }}
+                                        </strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <app-menu-crud
+                                        [types]="'a,e,d'"
+                                        [isAddDisabled]="!isEdit"
+                                        [isEditDisabled]="!canDeleteCopyChild"
+                                        [isDeleteDisabled]="!canDeleteCopyChild"
+                                        (addClick)="onAddChildClick($event)"
+                                        (editClick)="onEditChildClick($event)"
+                                        (deleteClick)="
+                                            onDeleteChildClick($event)
+                                        "
+                                    >
+                                    </app-menu-crud>
+                                </div>
+                            </p-toolbar>
+                            <div class="main-child-body">
+                                <app-data-table
+                                    [stateKey]="'module-master-detail-childs'"
+                                    [columns]="columnsChild"
+                                    [value]="selectedData.settings"
+                                    [isDisabled]="!isEdit"
+                                    [selectedData]="selectedChildData"
+                                    [export]="false"
+                                    (onSelectRow)="onSelectChildRow($event)"
+                                    (onDblclickRow)="onDblclickChildRow($event)"
+                                    (onButtonClickEvent)="
+                                        onButtonClickEvent($event)
+                                    "
+                                ></app-data-table>
+                            </div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

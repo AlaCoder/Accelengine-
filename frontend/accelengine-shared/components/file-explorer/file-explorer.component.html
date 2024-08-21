@@ -1,0 +1,28 @@
+<p-toolbar>
+    <div class="p-toolbar-group-left"></div>
+    <div class="p-toolbar-group-right">
+        <button
+            pButton
+            pRipple
+            label="Télécharger"
+            icon="pi pi-download"
+            [disabled]="!selectedNode"
+            (click)="downloadFile()"
+        ></button>
+        <!-- <button
+            pButton
+            pRipple
+            label="Supprimer"
+            icon="pi pi-trash"
+            [disabled]="!selectedNode"
+        ></button> -->
+    </div>
+</p-toolbar>
+<p-tree
+    [filter]="true"
+    [value]="nodes"
+    selectionMode="single"
+    [(selection)]="selectedNode"
+    (onNodeSelect)="nodeSelect($event)"
+    (onNodeUnselect)="nodeUnselect($event)"
+></p-tree>

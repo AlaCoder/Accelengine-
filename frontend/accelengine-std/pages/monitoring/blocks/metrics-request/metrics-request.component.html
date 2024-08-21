@@ -1,0 +1,32 @@
+<table *ngIf="!updating && requestMetrics" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Count</th>
+            <th class="text-right">Mean</th>
+            <th class="text-right">Max</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of requestMetrics['percode'] | keyvalue">
+            <td>{{ entry.key }}</td>
+            <td>
+                <p-progressBar
+                    [value]="
+                        round(
+                            (entry.value.count * 100) /
+                                requestMetrics['all'].count
+                        )
+                    "
+                    class="progressbar-success"
+                >
+                    <span>{{ entry.value.count }}</span>
+                </p-progressBar>
+            </td>
+            <td class="text-right">
+                {{ filterNaN(entry.value.mean) | number: "1.0-2" }}
+            </td>
+            <td class="text-right">{{ entry.value.max | number: "1.0-2" }}</td>
+        </tr>
+    </tbody>
+</table>

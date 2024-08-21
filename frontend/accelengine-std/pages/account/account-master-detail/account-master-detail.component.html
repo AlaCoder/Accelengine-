@@ -1,0 +1,258 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des comptes</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayExport]="true"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'account-master-detail'"
+                    [export]="true"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails compte {{ f.id.value }}</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView>
+                        <p-tabPanel header="Compte">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <div class="card">
+                                        <h5>Compte</h5>
+                                        <div class="p-fluid">
+                                            <app-input-form
+                                                [formGroup]="formGroup"
+                                                [name]="'username'"
+                                                [label]="'Username'"
+                                                [value]="f.username"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <app-input-form
+                                                [formGroup]="formGroup"
+                                                [type]="'password'"
+                                                [name]="'password'"
+                                                [label]="'Password'"
+                                                [value]="f.password"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <app-input-form
+                                                [formGroup]="formGroup"
+                                                [name]="'email'"
+                                                [label]="'Email'"
+                                                [value]="f.email"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <app-switch-form
+                                                [formGroup]="formGroup"
+                                                [name]="'activate'"
+                                                [label]="'Est activé'"
+                                                [value]="f.activate"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-switch-form>
+                                            <app-select-form
+                                                [formGroup]="formGroup"
+                                                [name]="'supervisorAccount'"
+                                                [label]="
+                                                    'Responsable hiérarchique'
+                                                "
+                                                placeholder="Choisir un superviseur"
+                                                [value]="f.supervisorAccount"
+                                                [values]="activatedAccounts"
+                                                [displayField]="'email'"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-select-form>
+                                            <app-select-form
+                                                [formGroup]="formGroup"
+                                                [name]="'redirectMenu'"
+                                                [label]="'Menu de redirection'"
+                                                placeholder="Indéfini"
+                                                [value]="f.redirectMenu"
+                                                [values]="allMenus"
+                                                [displayField]="'label'"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-select-form>
+                                            <app-multiselect-form
+                                                [formGroup]="formGroup"
+                                                [name]="'affectedTenants'"
+                                                [label]="'Tenants'"
+                                                placeholder="Indéfini"
+                                                [value]="f.affectedTenants"
+                                                [values]="tenants"
+                                                [displayField]="'codeName'"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-multiselect-form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <div class="card">
+                                        <h5>Profile</h5>
+                                        <div class="p-fluid">
+                                            <app-select-form
+                                                [formGroup]="
+                                                    formGroup.get('profile')
+                                                "
+                                                [name]="'civility'"
+                                                [label]="'Civilité'"
+                                                [placeholder]="'Indéfini'"
+                                                [value]="
+                                                    f.profile.get('civility')
+                                                "
+                                                [values]="civilitys"
+                                                [displayField]="'label'"
+                                                [returnValue]="'code'"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                                [filter]="false"
+                                            >
+                                            </app-select-form>
+                                            <app-input-form
+                                                [formGroup]="
+                                                    formGroup.get('profile')
+                                                "
+                                                [name]="'firstname'"
+                                                [label]="'Prénom'"
+                                                [value]="f.firstname"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <app-input-form
+                                                [formGroup]="
+                                                    formGroup.get('profile')
+                                                "
+                                                [name]="'lastname'"
+                                                [label]="'Nom'"
+                                                [value]="f.lastname"
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                            >
+                                            </app-input-form>
+                                            <app-number-form
+                                                [formGroup]="
+                                                    formGroup.get('contact')
+                                                "
+                                                [name]="'mainPhone'"
+                                                [label]="'Téléphone'"
+                                                [value]="
+                                                    formGroup
+                                                        .get('contact')
+                                                        .get('mainPhone')
+                                                "
+                                                [isSubmitted]="isSubmitted"
+                                                [isDisabled]="!isEdit"
+                                                [maxlength]="10"
+                                            >
+                                            </app-number-form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                        <p-tabPanel header="Rôles">
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong>Liste des roles</strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right"></div>
+                            </p-toolbar>
+                            <app-selectable-data-table
+                                [columns]="columnsChild"
+                                [value]="roles"
+                                [(selectedData)]="selectedData.roles"
+                                (onSelectRow)="onSelectChildRow($event)"
+                                (onDblclickRow)="onDblclickChildRow($event)"
+                                [isDisabled]="!isEdit"
+                            ></app-selectable-data-table>
+                        </p-tabPanel>
+                        <p-tabPanel
+                            header="Historiques"
+                            *ngIf="selectedData.id"
+                        >
+                            <app-action-history
+                                [entity]="selectedData"
+                            ></app-action-history>
+                        </p-tabPanel>
+                        <p-tabPanel header="Hiérarchie" *ngIf="selectedData.id">
+                            <app-organization-chart
+                                [id]="selectedData.id"
+                            ></app-organization-chart>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

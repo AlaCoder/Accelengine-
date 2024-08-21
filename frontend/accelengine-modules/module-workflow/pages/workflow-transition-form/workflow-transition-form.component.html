@@ -1,0 +1,106 @@
+<div class="form-popup">
+    <form [formGroup]="formGroup">
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'fromStatus'"
+            [label]="'Source'"
+            [placeholder]="'Choisir Source'"
+            [values]="workflowStatuses"
+            [displayField]="'label'"
+            [value]="f.fromStatus"
+            [dataKey]="''"
+            [isSubmitted]="isSubmitted"
+            [isDisabled]="workflowStatuses.length < 2"
+        >
+        </app-select-form>
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'toStatus'"
+            [label]="'Cible'"
+            [placeholder]="'Choisir Cible'"
+            [values]="workflowStatuses"
+            [displayField]="'label'"
+            [value]="f.toStatus"
+            [dataKey]="''"
+            [isSubmitted]="isSubmitted"
+            [isDisabled]="workflowStatuses.length < 2"
+        >
+        </app-select-form>
+        <app-multiselect-form
+            [formGroup]="formGroup"
+            [name]="'roles'"
+            [label]="'Rôles'"
+            [placeholder]="'Sélectionner des rôles'"
+            [values]="roles"
+            [value]="f.roles"
+            [displayField]="'name'"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-multiselect-form>
+        <app-multiselect-form
+            [formGroup]="formGroup"
+            [name]="'hooks'"
+            [label]="'Traitements'"
+            [placeholder]="'Sélectionner des traitements à faire'"
+            [values]="hooks"
+            [value]="f.hooks"
+            [displayField]="'name'"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-multiselect-form>
+        <app-select-form
+            [formGroup]="formGroup"
+            [name]="'constraint'"
+            [label]="'Contraints'"
+            [placeholder]="'Sélectionner les Contraintes'"
+            [values]="constraints"
+            [value]="f.constraint"
+            [displayField]="'name'"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-select-form>
+        <app-switch-form
+            [formGroup]="formGroup"
+            [name]="'automaticTransition'"
+            [label]="'Automatique'"
+            [value]="f.automaticTransition"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-switch-form>
+        <app-switch-form
+            [formGroup]="formGroup"
+            [name]="'commentIsRequired'"
+            [label]="'Commentaire est obligatoire'"
+            [value]="f.commentIsRequired"
+            [isSubmitted]="isSubmitted"
+        >
+        </app-switch-form>
+        <app-input-mask
+            [formGroup]="formGroup"
+            [name]="'estimation'"
+            [label]="'Estimation'"
+            [value]="f.estimation"
+            [placeholder]="'JJ-HH-MM'"
+            [isSubmitted]="isSubmitted"
+            [mask]="'99-99-99'"
+            [help]="'Jours-Heures-Minutes'"
+        >
+        </app-input-mask>
+    </form>
+    <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+        <div class="p-toolbar-group-right">
+            <p-button
+                [label]="closeBtnLabel"
+                (click)="onCancel()"
+                styleClass="p-button-text"
+            ></p-button>
+            <p-button
+                [label]="saveBtnLabel"
+                (click)="onSubmit()"
+                styleClass="p-button-text"
+            >
+            </p-button>
+        </div>
+    </p-toolbar>
+</div>

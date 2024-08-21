@@ -1,0 +1,38 @@
+<p-card>
+    <ng-template pTemplate="header">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <app-menu-bookmark></app-menu-bookmark>
+                <h4>
+                    <strong>Import export widgets</strong>
+                </h4>
+            </div>
+            <div class="p-toolbar-group-right"></div>
+        </p-toolbar>
+    </ng-template>
+    <div class="main-body p-fluid">
+        <p-tabView [(activeIndex)]="indexOfActivePanel">
+            <p-tabPanel header="Import">
+                <div class="mt-3">
+                    <app-file-form
+                        [formGroup]="formGroup"
+                        [name]="'file'"
+                        [label]="'Choisir un fichier'"
+                        [value]="f.file"
+                        [isSubmitted]="isSubmitted"
+                        [isDisabled]="false"
+                    >
+                    </app-file-form>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Export">
+                <app-selectable-data-table
+                    [columns]="columnsWidgets"
+                    [value]="dataWidgets"
+                    [(selectedData)]="selectedData"
+                    [isDisabled]="false"
+                ></app-selectable-data-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</p-card>

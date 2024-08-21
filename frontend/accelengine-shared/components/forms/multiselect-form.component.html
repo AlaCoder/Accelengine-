@@ -1,0 +1,44 @@
+<div class="form p-fluid" [formGroup]="formGroup">
+    <div class="field grid">
+        <label
+            class="col-12 mb-2 md:col-{{collabel}}"
+            *ngIf="label != ''"
+            [ngClass]="{ required: isRequired() }"
+        >
+            {{ label | translate }}
+        </label>
+        <div
+            [attr.class]="
+                label != '' ? 'input col-12 md:col-'+ colcomponent : 'input col-12'
+            "
+        >
+            <p-multiSelect
+                formControlName="{{ name }}"
+                id="{{ name }}"
+                name="{{ name }}"
+                [ngClass]="{
+                    'ng-invalid ng-dirty': isSubmitted && getErrors()
+                }"
+                [dataKey]="dataKey"
+                [options]="values"
+                placeholder="{{ placeholder | translate }}"
+                [filter]="filter"
+                [emptyFilterMessage]="emptyFilterMessage"
+                optionLabel="{{ displayField }}"
+                optionValue="{{ returnValue }}"
+                (ngModelChange)="onValueChange($event)"
+                [group]="group"
+                [disabled]="isDisabled"
+                [appendTo]="'body'"
+                (onShow)="onValuesShow($event)"
+                display="chip"
+            >
+            </p-multiSelect>
+            <app-validation-form
+                *ngIf="isSubmitted && getErrors()"
+                [value]="value"
+                class="invalid-feedback"
+            ></app-validation-form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,145 @@
+<div class="grid">
+    <div class="col-12 layout-config">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <strong>
+                                {{ "std.master_setup" | translate }}</strong
+                            >
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [showResiz]="false"
+                            [types]="'e'"
+                            (editClick)="onEditClick()"
+                        ></app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-8">
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'language'"
+                                [label]="'label.language'"
+                                [placeholder]="'Indéfini'"
+                                [value]="f.language"
+                                [values]="languages"
+                                [displayField]="'label'"
+                                [dataKey]="''"
+                                [returnValue]="'code'"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                [filter]="false"
+                                (onChange)="onChangeLanguage($event)"
+                            >
+                            </app-select-form>
+                            <div class="pl-3">
+                                <b>Layout</b>
+                                <div class="formgrid grid">
+                                    <div class="col-4">
+                                        <app-input-radio-button
+                                            [formGroup]="formGroup"
+                                            [name]="'colorScheme'"
+                                            [label]="'Light'"
+                                            [valueRB]="'light'"
+                                            [value]="f.colorScheme"
+                                            [isSubmitted]="isSubmitted"
+                                            [isDisabled]="!isEdit"
+                                            (click)="changeColorScheme('light')"
+                                        ></app-input-radio-button>
+                                    </div>
+                                    <div class="col-4">
+                                        <app-input-radio-button
+                                            [formGroup]="formGroup"
+                                            [name]="'colorScheme'"
+                                            [label]="'Dark'"
+                                            [valueRB]="'dark'"
+                                            [value]="f.colorScheme"
+                                            [isSubmitted]="isSubmitted"
+                                            [isDisabled]="!isEdit"
+                                            (click)="changeColorScheme('dark')"
+                                        ></app-input-radio-button>
+                                    </div>
+                                    <div class="col-12">
+                                        <b>Themes</b>
+                                        <div class="layout-themes">
+                                            <div *ngFor="let t of themes">
+                                                <a
+                                                    style="cursor: pointer"
+                                                    (click)="
+                                                        changeTheme(t.name)
+                                                    "
+                                                    [ngStyle]="{
+                                                        'background-color':
+                                                        app_config.theme.colorScheme ===
+                                                            'light'
+                                                                ? t.color1
+                                                                : t.color2
+                                                    }"
+                                                >
+                                                    <i
+                                                        class="pi pi-check"
+                                                        *ngIf="
+                                                        app_config.theme.theme === t.name
+                                                        "
+                                                    ></i>
+                                                </a>
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <b>Layout Colors</b>
+                                        <div
+                                            class="layout-themes"
+                                            *ngIf="app_config.theme.colorScheme === 'light'"
+                                        >
+                                            <div *ngFor="let l of layoutColors">
+                                                <a
+                                                    style="cursor: pointer"
+                                                    (click)="
+                                                        changeLayoutColor(
+                                                            l.name
+                                                        )
+                                                    "
+                                                    [ngStyle]="{
+                                                        background: l.color
+                                                    }"
+                                                >
+                                                    <i
+                                                        class="pi pi-check"
+                                                        *ngIf="
+                                                        app_config.theme.layoutColor ===
+                                                            l.name
+                                                        "
+                                                    ></i>
+                                                </a>
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <div
+                                            *ngIf="app_config.theme.colorScheme !== 'light'"
+                                        >
+                                            <p>
+                                                Layout themes are only available
+                                                in light mode by design as large
+                                                surfaces can emit too much
+                                                brightness in dark mode.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

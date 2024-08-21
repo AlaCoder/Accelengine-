@@ -1,0 +1,145 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des tables</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            [displayAdd]="false"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="getTables()"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                    (onButtonClickEvent)="onButtonClickEvent($event)"
+                >
+                </app-data-table>
+                <app-data-table
+                    [columns]="columns2"
+                    [value]="getMetadatas()"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                    (onButtonClickEvent)="onButtonClickEvent($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails table</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <p-button
+                            label="Charger"
+                            styleClass="mr-1"
+                            icon="p-button-icon fas fa-sync"
+                            (click)="loadTable(selectedData.name)"
+                        >
+                        </p-button>
+                        <p-button
+                            label="Détruire"
+                            styleClass="mr-1"
+                            icon="p-button-icon fas fa-trash"
+                            (click)="destroyTable(selectedData.name)"
+                        >
+                        </p-button>
+                        <p-button
+                            label="Backup"
+                            styleClass="mr-1"
+                            icon="p-button-icon fas fa-file-export"
+                            (click)="backupTable(selectedData.name)"
+                        >
+                        </p-button>
+                        <app-menu-detail
+                            [types]="''"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <p-tabView>
+                    <p-tabPanel header="Détails">
+                        <form [formGroup]="formGroup">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'name'"
+                                [label]="'Nom'"
+                                [value]="f.name"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                            >
+                            </app-input-form>
+
+                            <div
+                                class="grid"
+                                *ngFor="
+                                    let column of selectedData.columns;
+                                    let i = index
+                                "
+                            >
+                                <div class="col-6">{{ column }}</div>
+                                <div class="col-6">
+                                    {{ selectedData.types[i] }}
+                                </div>
+                            </div>
+                        </form>
+                    </p-tabPanel>
+                    <p-tabPanel header="Backups">
+                        <div *ngFor="let backup of backups">
+                            {{ backup }}
+                            <p-button
+                                label="Charge"
+                                styleClass="mr-1"
+                                (click)="
+                                    loadBackupTable(selectedData.code, backup)
+                                "
+                            >
+                            </p-button>
+                        </div>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </p-card>
+    </div>
+</div>

@@ -1,0 +1,293 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des metadatas</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [stateKey]="'metadata-master-detail'"
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails metadata</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <form [formGroup]="formGroup">
+                    <p-tabView [(activeIndex)]="activeIndex">
+                        <p-tabPanel header="Metadata">
+                            <div class="grid">
+                                <div class="col-4">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'code'"
+                                        [label]="'Code'"
+                                        [value]="f.code"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                    >
+                                    </app-input-form>
+                                </div>
+                                <div class="col-8">
+                                    <app-input-form
+                                        [formGroup]="formGroup"
+                                        [name]="'description'"
+                                        [label]="'Description'"
+                                        [value]="f.description"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [col]="'2,10'"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                            <div
+                                class="grid"
+                                [style]="{ margin: '-35px 0 0 0' }"
+                            >
+                                <div class="col-6">
+                                    <p-listbox
+                                        [options]="tables"
+                                        formControlName="tables"
+                                        (onClick)="onTableClick($event)"
+                                        [filter]="true"
+                                        [checkbox]="true"
+                                        [showToggleAll]="false"
+                                        optionLabel="name"
+                                        [metaKeySelection]="false"
+                                        [multiple]="true"
+                                        [dataKey]="'fullCode'"
+                                        styleClass="main-listbox"
+                                    >
+                                        <ng-template pTemplate="header">
+                                            Sélectionner des tables
+                                        </ng-template>
+                                        <ng-template let-table pTemplate="item">
+                                            <div>{{ table.fullCode }}</div>
+                                        </ng-template>
+                                    </p-listbox>
+                                </div>
+                                <div class="col-6">
+                                    <div
+                                        *ngFor="let groupColumn of groupColumns"
+                                        class="mb-2"
+                                    >
+                                        <p-listbox
+                                            [options]="groupColumn.items"
+                                            formControlName="columns"
+                                            (onClick)="onColumnClick($event)"
+                                            [checkbox]="true"
+                                            [showToggleAll]="false"
+                                            [metaKeySelection]="false"
+                                            [multiple]="true"
+                                            [dataKey]="'fullCode'"
+                                        >
+                                            <ng-template pTemplate="header">
+                                                <strong>{{
+                                                    groupColumn.table.name
+                                                }}</strong>
+                                            </ng-template>
+                                            <ng-template
+                                                let-column
+                                                pTemplate="item"
+                                            >
+                                                <div
+                                                    class="p-d-flex p-ai-center"
+                                                >
+                                                    <span
+                                                        >{{ column.name }} -
+                                                        {{
+                                                            column.typeString
+                                                        }}</span
+                                                    >
+                                                </div>
+                                            </ng-template>
+                                        </p-listbox>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                        <p-tabPanel
+                            header="Noms des tables"
+                            formArrayName="namesOfTables"
+                        >
+                            <div
+                                class="grid"
+                                *ngFor="
+                                    let control of namesOfTablesControls();
+                                    let i = index
+                                "
+                            >
+                                <div class="col-4">
+                                    <app-input-form
+                                        [formGroup]="control"
+                                        [name]="'fullCode'"
+                                        [label]="'Code'"
+                                        [value]="control.fullCode"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="true"
+                                        [col]="'2,10'"
+                                    >
+                                    </app-input-form>
+                                </div>
+                                <div class="col-8">
+                                    <app-input-form
+                                        [formGroup]="control"
+                                        [name]="'name'"
+                                        [label]="'Nom'"
+                                        [value]="control.name"
+                                        [isSubmitted]="isSubmitted"
+                                        [isDisabled]="!isEdit"
+                                        [col]="'2,10'"
+                                    >
+                                    </app-input-form>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                        <p-tabPanel *ngIf="dislpayFact()" header="Jointures">
+                            <app-select-form
+                                [formGroup]="formGroup"
+                                [name]="'factTable'"
+                                [label]="'Fact table'"
+                                [placeholder]="'Indéfini'"
+                                [values]="selectedTablesWithCol"
+                                [value]="f.factTable"
+                                [displayField]="'name'"
+                                [dataKey]="'fullCode'"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                (onChange)="onChangeFact($event)"
+                            >
+                            </app-select-form>
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong>Liste des jointures</strong>
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <app-menu-crud
+                                        [types]="'a,e,d'"
+                                        [isAddDisabled]="
+                                            !isEdit || !f.factTable.value
+                                        "
+                                        [isEditDisabled]="!canDeleteCopyChild"
+                                        [isDeleteDisabled]="!canDeleteCopyChild"
+                                        (addClick)="onAddChildClick($event)"
+                                        (editClick)="onEditChildClick($event)"
+                                        (deleteClick)="
+                                            onDeleteChildClick($event)
+                                        "
+                                    >
+                                    </app-menu-crud>
+                                </div>
+                            </p-toolbar>
+                            <app-data-table
+                                [stateKey]="
+                                    'metadata-master-detail-columnsJoin'
+                                "
+                                [columns]="columnsJoin"
+                                [value]="selectedData.joins"
+                                [selectedData]="selectedChildData"
+                                [isDisabled]="!isEdit"
+                                (onSelectRow)="onSelectChildRow($event)"
+                                (onDblclickRow)="onDblclickChildRow($event)"
+                            >
+                            </app-data-table>
+                        </p-tabPanel>
+                        <p-tabPanel
+                            *ngIf="dislpayCC()"
+                            header="Colonne calculée"
+                        >
+                            <p-toolbar>
+                                <div class="p-toolbar-group-left">
+                                    <h4>
+                                        <i class="fa fa-align-justify pr-2"></i>
+                                        <strong
+                                            >Liste des colonne calculée</strong
+                                        >
+                                    </h4>
+                                </div>
+                                <div class="p-toolbar-group-right">
+                                    <app-menu-crud
+                                        [types]="'a,e,d'"
+                                        [isAddDisabled]="!isEdit"
+                                        [isEditDisabled]="!canDeleteCopyChild"
+                                        [isDeleteDisabled]="!canDeleteCopyChild"
+                                        (addClick)="onAddCCClick($event)"
+                                        (editClick)="onEditCCClick($event)"
+                                        (deleteClick)="onDeleteCCClick($event)"
+                                    >
+                                    </app-menu-crud>
+                                </div>
+                            </p-toolbar>
+                            <app-data-table
+                                [stateKey]="'metadata-master-detail-columnsCC'"
+                                [columns]="columnsCC"
+                                [value]="selectedData.ccs"
+                                [selectedData]="selectedChildData"
+                                [isDisabled]="!isEdit"
+                                (onSelectRow)="onSelectChildRow($event)"
+                                (onDblclickRow)="onDblclickChildRow($event)"
+                            >
+                            </app-data-table>
+                        </p-tabPanel>
+                    </p-tabView>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>

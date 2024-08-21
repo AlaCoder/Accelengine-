@@ -1,0 +1,935 @@
+<div class="grid">
+    <div [ngClass]="getMasterDetailClass('MASTER')">
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <app-menu-bookmark></app-menu-bookmark>
+                        <h4>
+                            <strong>Liste des widgets</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-master
+                            [criteria]="criteria"
+                            (criteriaClick)="onClickCriteria()"
+                            (addClick)="onAddClick()"
+                            (reloadClick)="onClickReload()"
+                        ></app-menu-master>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div class="main-body p-fluid">
+                <app-data-table
+                    [columns]="columns"
+                    [value]="datas"
+                    [selectedData]="selectedData"
+                    (onSelectRow)="onSelectRow($event)"
+                    (onDblclickRow)="onDblclickRow($event)"
+                    [paginator]="pagination && isMasterExpanded"
+                    (onPageChanged)="onPageChanged($event)"
+                >
+                </app-data-table>
+            </div>
+        </p-card>
+    </div>
+    <div
+        [ngClass]="getMasterDetailClass('DETAIL')"
+        *ngIf="!isMasterExpanded"
+        [@slideInOut]
+    >
+        <p-card>
+            <ng-template pTemplate="header">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <h4>
+                            <i class="fa fa-edit pr-2"></i>
+                            <strong>Détails widget</strong>
+                        </h4>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <app-menu-detail
+                            [types]="typesMenuCrud"
+                            [isEditDisabled]="isEdit"
+                            [isDeleteDisabled]="!canDeleteCopy"
+                            [isCopyDisabled]="!canDeleteCopy"
+                            (editClick)="onEditClick()"
+                            (deleteClick)="onDeleteClick()"
+                            (copyClick)="onCopyClick()"
+                            (closeClick)="onFormCloseClick()"
+                            (maximizeClick)="onFormMaximizeClick()"
+                        >
+                        </app-menu-detail>
+                    </div>
+                </p-toolbar>
+            </ng-template>
+            <div *ngIf="!widgetType" class="main-body p-fluid" [@slideInOut]>
+                <div class="col p-ai-center p-jc-center">
+                    <div class="grid grid-button">
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Tableau"
+                                (click)="changeWidgetType('TABLE')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Tableau pivot"
+                                (click)="changeWidgetType('PIVOTTABLE')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Tableau pivot 2"
+                                (click)="changeWidgetType('PIVOTTABLE2')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Indicateur"
+                                (click)="changeWidgetType('INDICATOR')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Jauge"
+                                (click)="changeWidgetType('GAUGE')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Bar"
+                                (click)="changeWidgetType('BAR')"
+                            ></button>
+                        </div>
+                        <div class="col-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button"
+                                label="Pie"
+                                (click)="changeWidgetType('PIE')"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="widgetType" class="main-body p-fluid" [@slideInOut]>
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-3">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'code'"
+                                [label]="'Code'"
+                                [value]="f.code"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                [col]="'3,9'"
+                            >
+                            </app-input-form>
+                        </div>
+                        <div class="col-5">
+                            <app-input-form
+                                [formGroup]="formGroup"
+                                [name]="'description'"
+                                [label]="'Description'"
+                                [value]="f.description"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                [col]="'3,9'"
+                            >
+                            </app-input-form>
+                        </div>
+                        <div class="col-3" *ngIf="widgetType === 'PIVOTTABLE'">
+                            <app-switch-form
+                                [formGroup]="formGroup"
+                                [name]="'showLastLine'"
+                                [label]="'Afficher dernière ligne'"
+                                [value]="f.showLastLine"
+                                [isSubmitted]="isSubmitted"
+                                [isDisabled]="!isEdit"
+                                [col]="'8,4'"
+                                (onChange)="updateWidget()"
+                            >
+                            </app-switch-form>
+                        </div>
+                    </div>
+
+                    <p-splitter
+                        [style]="{
+                            height: 'calc(100vh - 290px)',
+                            margin: '-20px 0 0 0'
+                        }"
+                        [panelSizes]="[10, 75, 5]"
+                    >
+                        <ng-template pTemplate>
+                            <div class="col col-metadata">
+                                <app-select-form
+                                    [formGroup]="formGroup"
+                                    [name]="'metadata'"
+                                    [placeholder]="'Metadata'"
+                                    [values]="metadatas"
+                                    [value]="f.metadata"
+                                    [displayField]="'code'"
+                                    [isSubmitted]="isSubmitted"
+                                    [isDisabled]="!isEdit"
+                                    (onChange)="onChangeMetadata($event)"
+                                >
+                                </app-select-form>
+                                <p-accordion>
+                                    <p-accordionTab
+                                        *ngFor="let table of selectedTables"
+                                        [header]="getTableName(table)"
+                                    >
+                                        <div
+                                            *ngFor="let column of table.columns"
+                                        >
+                                            <div
+                                                [dndDraggable]="column"
+                                                [dndType]="'ALL'"
+                                                (dndStart)="
+                                                    onDragStart(
+                                                        table,
+                                                        column,
+                                                        false
+                                                    )
+                                                "
+                                                class="col column-to-select"
+                                            >
+                                                {{ column.name }}
+                                            </div>
+                                        </div>
+                                    </p-accordionTab>
+                                    <p-accordionTab
+                                        *ngIf="displayCC"
+                                        header="Colonne calculée"
+                                    >
+                                        <div
+                                            *ngFor="
+                                                let column of this
+                                                    .selectedMetadata.ccs
+                                            "
+                                        >
+                                            <div
+                                                [dndDraggable]="column"
+                                                [dndType]="'ALL'"
+                                                (dndStart)="
+                                                    onDragStart(
+                                                        null,
+                                                        column,
+                                                        true
+                                                    )
+                                                "
+                                                class="col column-to-select"
+                                            >
+                                                {{ column.name }}
+                                            </div>
+                                        </div>
+                                    </p-accordionTab>
+                                </p-accordion>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate>
+                            <p-splitter
+                                layout="vertical"
+                                [panelSizes]="[10, 80]"
+                                [minSizes]="[10, 50]"
+                            >
+                                <ng-template pTemplate>
+                                    <div class="col">
+                                        <!-- Columns -->
+                                        <p-card
+                                            styleClass="columns-card"
+                                            *ngIf="
+                                                widgetType != 'INDICATOR' &&
+                                                widgetType != 'GAUGE'
+                                            "
+                                        >
+                                            <div class="grid columns-list">
+                                                <div class="col-2 p-text-bold">
+                                                    {{ colName }}:
+                                                </div>
+                                                <div
+                                                    class="col-10 dropzone"
+                                                    [dndDropzone]="[
+                                                        'ALL',
+                                                        'COLUMN'
+                                                    ]"
+                                                    (dndDrop)="
+                                                        dropColumn($event)
+                                                    "
+                                                >
+                                                    <span
+                                                        *ngFor="
+                                                            let column of selectedColumns;
+                                                            let i = index
+                                                        "
+                                                        [dndDraggable]="column"
+                                                        (dndStart)="
+                                                            onDragStart(
+                                                                null,
+                                                                column,
+                                                                false
+                                                            )
+                                                        "
+                                                        dndEffectAllowed="move"
+                                                        [dndType]="'COLUMN'"
+                                                        class="selected-column"
+                                                    >
+                                                        {{ column.name }}
+                                                        <i
+                                                            class="fas fa-cog action-bottom"
+                                                            (click)="
+                                                                showEditColumn(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                        <i
+                                                            class="fas fa-trash action-bottom"
+                                                            (click)="
+                                                                removeFromColumns(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        dndPlaceholderRef
+                                                        class="selected-column dndPlaceholder"
+                                                    >
+                                                        {{ dragedCol?.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </p-card>
+                                        <!-- Rows -->
+                                        <p-card
+                                            styleClass="columns-card"
+                                            *ngIf="widgetType != 'TABLE'"
+                                        >
+                                            <div class="grid columns-list">
+                                                <div class="col-2 p-text-bold">
+                                                    {{ rowName }}:
+                                                </div>
+                                                <div
+                                                    class="col-10 dropzone"
+                                                    [dndDropzone]="[
+                                                        'ALL',
+                                                        'ROW'
+                                                    ]"
+                                                    (dndDrop)="dropRow($event)"
+                                                >
+                                                    <span
+                                                        *ngFor="
+                                                            let column of selectedRows;
+                                                            let i = index
+                                                        "
+                                                        [dndDraggable]="column"
+                                                        (dndStart)="
+                                                            onDragStart(
+                                                                null,
+                                                                column,
+                                                                false
+                                                            )
+                                                        "
+                                                        dndEffectAllowed="move"
+                                                        [dndType]="'ROW'"
+                                                        class="selected-column"
+                                                    >
+                                                        {{ column.name }}
+                                                        <i
+                                                            class="fas fa-cog action-bottom"
+                                                            (click)="
+                                                                showEditRow(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                        <i
+                                                            class="fas fa-trash action-bottom"
+                                                            (click)="
+                                                                removeFromRows(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        dndPlaceholderRef
+                                                        class="selected-column dndPlaceholder"
+                                                    >
+                                                        {{ dragedCol?.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </p-card>
+                                        <!-- Pivot column -->
+                                        <p-card
+                                            styleClass="columns-card"
+                                            *ngIf="widgetType == 'PIVOTTABLE2'"
+                                        >
+                                            <div class="grid columns-list">
+                                                <div class="col-2 p-text-bold">
+                                                    Colonne pivot :
+                                                </div>
+                                                <div
+                                                    class="col-10 dropzone"
+                                                    [dndDropzone]="[
+                                                        'ALL',
+                                                        'PIV'
+                                                    ]"
+                                                    (dndDrop)="dropPiv($event)"
+                                                >
+                                                    <span
+                                                        *ngFor="
+                                                            let column of selectedPivs;
+                                                            let i = index
+                                                        "
+                                                        [dndDraggable]="column"
+                                                        (dndStart)="
+                                                            onDragStart(
+                                                                null,
+                                                                column,
+                                                                false
+                                                            )
+                                                        "
+                                                        dndEffectAllowed="move"
+                                                        [dndType]="'PIV'"
+                                                        class="selected-column"
+                                                    >
+                                                        {{ column.name }}
+                                                        <i
+                                                            class="fas fa-cog action-bottom"
+                                                            (click)="
+                                                                showEditPiv(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                        <i
+                                                            class="fas fa-trash action-bottom"
+                                                            (click)="
+                                                                removeFromPivs(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        dndPlaceholderRef
+                                                        class="selected-column dndPlaceholder"
+                                                    >
+                                                        {{ dragedCol?.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </p-card>
+                                        <!-- Filtres -->
+                                        <p-card styleClass="columns-card">
+                                            <div class="grid columns-list">
+                                                <div class="col-2 p-text-bold">
+                                                    Filtres:
+                                                </div>
+                                                <div
+                                                    class="col-10 dropzone"
+                                                    [dndDropzone]="['ALL']"
+                                                    (dndDrop)="
+                                                        dropFilter($event)
+                                                    "
+                                                >
+                                                    <span
+                                                        *ngFor="
+                                                            let column of selectedFilters
+                                                        "
+                                                        class="selected-column"
+                                                    >
+                                                        {{ column.name }}
+                                                        <i
+                                                            class="fas fa-cog action-bottom"
+                                                            (click)="
+                                                                showEditFilter(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                        <i
+                                                            class="fas fa-trash action-bottom"
+                                                            (click)="
+                                                                removeFromFilters(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        dndPlaceholderRef
+                                                        class="selected-column dndPlaceholder"
+                                                    >
+                                                        {{ dragedCol?.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </p-card>
+                                        <!-- Sorts -->
+                                        <p-card
+                                            styleClass="columns-card"
+                                            *ngIf="
+                                                widgetType != 'INDICATOR' &&
+                                                widgetType != 'GAUGE' &&
+                                                widgetType != 'BAR' &&
+                                                widgetType != 'PIE'
+                                            "
+                                        >
+                                            <div class="grid columns-list">
+                                                <div class="col-2 p-text-bold">
+                                                    Tries:
+                                                </div>
+                                                <div
+                                                    class="col-10 dropzone"
+                                                    [dndDropzone]="['ALL']"
+                                                    (dndDrop)="dropSort($event)"
+                                                >
+                                                    <span
+                                                        *ngFor="
+                                                            let column of selectedSorts
+                                                        "
+                                                        class="selected-column"
+                                                    >
+                                                        {{ column.name }}
+                                                        <i
+                                                            [ngClass]="
+                                                                getSortIcon(
+                                                                    column
+                                                                )
+                                                            "
+                                                            (click)="
+                                                                changeSort(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                        <i
+                                                            class="fas fa-trash action-bottom"
+                                                            (click)="
+                                                                removeFromSorts(
+                                                                    column
+                                                                )
+                                                            "
+                                                        ></i>
+                                                    </span>
+                                                    <span
+                                                        dndPlaceholderRef
+                                                        class="selected-column dndPlaceholder"
+                                                    >
+                                                        {{ dragedCol?.name }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </p-card>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate>
+                                    <div
+                                        class="col col-main p-ai-center p-jc-center"
+                                    >
+                                        <app-widget-view
+                                            [load]="loadDatas"
+                                            [widget]="widget"
+                                        >
+                                        </app-widget-view>
+                                    </div>
+                                </ng-template>
+                            </p-splitter>
+                        </ng-template>
+                    </p-splitter>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+<p-dialog header="Modifier le filtre" [(visible)]="displayConfigFilter">
+    <div *ngIf="selectedColumn" class="grid-no-margin">
+        <div class="col-12">
+            <div class="field grid">
+                <label class="col-3">Code</label>
+                <div class="col-9">
+                    {{ selectedColumn.code }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="field grid">
+                <label class="col-3">Filtre</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <p-dropdown
+                            [options]="filters"
+                            [(ngModel)]="selectedFilter"
+                            optionLabel="label"
+                            optionValue="code"
+                            placeholder="Indéfini"
+                            appendTo="body"
+                            [showClear]="true"
+                            (ngModelChange)="onFilterChange($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <container-element [ngSwitch]="selectedFilter">
+                <some-element *ngSwitchCase="'BETWEEN'">
+                    <div
+                        *ngIf="
+                            selectedColumn.type == 'INTEGER' ||
+                            selectedColumn.type == 'LONG'
+                        "
+                    >
+                        <div class="field grid">
+                            <label class="col-3">Min</label>
+                            <div class="col-9">
+                                <div class="p-fluid">
+                                    <input
+                                        pInputText
+                                        type="number"
+                                        name="valueMinFilter"
+                                        [(ngModel)]="valueMinFilter"
+                                        class="form-control"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="field grid">
+                            <label class="col-3">Max</label>
+                            <div class="col-9">
+                                <div class="p-fluid">
+                                    <input
+                                        pInputText
+                                        type="number"
+                                        name="valueMaxFilter"
+                                        [(ngModel)]="valueMaxFilter"
+                                        class="form-control"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        *ngIf="
+                            selectedColumn.type == 'DATE' ||
+                            selectedColumn.type == 'DATETIME'
+                        "
+                    >
+                        <div class="field grid">
+                            <label class="col-3">Min</label>
+                            <div class="col-9">
+                                <div class="p-fluid">
+                                    <p-calendar
+                                        [showIcon]="true"
+                                        [showButtonBar]="true"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [(ngModel)]="valueMinFilter"
+                                        class="form-control"
+                                        [appendTo]="'body'"
+                                    >
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="field grid">
+                            <label class="col-3">Max</label>
+                            <div class="col-9">
+                                <div class="p-fluid">
+                                    <p-calendar
+                                        [showIcon]="true"
+                                        [showButtonBar]="true"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [(ngModel)]="valueMaxFilter"
+                                        class="form-control"
+                                        [appendTo]="'body'"
+                                    >
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </some-element>
+                <some-element *ngSwitchCase="'CONTAIN'">
+                    <div class="field grid">
+                        <label class="col-3">Liste</label>
+                        <div class="col-9">
+                            <div class="p-fluid">
+                                <p-multiSelect
+                                    [options]="filterlist"
+                                    [(ngModel)]="valueListFilter"
+                                    optionLabel="label"
+                                    optionValue="code"
+                                    placeholder="Indéfini"
+                                    appendTo="body"
+                                    [showClear]="true"
+                                    [filter]="false"
+                                    display="chip"
+                                    (ngModelChange)="onFilterChange($event)"
+                                >
+                                </p-multiSelect>
+                            </div>
+                        </div>
+                    </div>
+                </some-element>
+                <some-element *ngSwitchDefault>
+                    <div class="field grid">
+                        <label class="col-3">Valeur</label>
+                        <div class="col-9">
+                            <div class="p-fluid">
+                                <input
+                                    *ngIf="selectedColumn.type == 'STRING'"
+                                    pInputText
+                                    type="text"
+                                    name="valueFilter"
+                                    [(ngModel)]="valueFilter"
+                                    class="form-control"
+                                />
+                                <input
+                                    *ngIf="
+                                        selectedColumn.type == 'INTEGER' ||
+                                        selectedColumn.type == 'LONG'
+                                    "
+                                    pInputText
+                                    type="number"
+                                    name="valueFilter"
+                                    [(ngModel)]="valueFilter"
+                                    class="form-control"
+                                />
+                                <p-calendar
+                                    *ngIf="
+                                        selectedColumn.type == 'DATE' ||
+                                        selectedColumn.type == 'DATETIME'
+                                    "
+                                    [showIcon]="true"
+                                    [showButtonBar]="true"
+                                    [monthNavigator]="true"
+                                    [yearNavigator]="true"
+                                    [(ngModel)]="valueFilter"
+                                    class="form-control"
+                                    [appendTo]="'body'"
+                                >
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </some-element>
+            </container-element>
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Enregistrer"
+            (click)="closeEditFilter()"
+            styleClass="p-button-text"
+        >
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog header="Modifier la colonne" [(visible)]="displayConfigCol">
+    <div *ngIf="selectedColumn" class="grid-no-margin">
+        <div class="col-12">
+            <div class="field grid">
+                <label class="col-3">Code</label>
+                <div class="col-9">
+                    {{ selectedColumn.code }}
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="field grid">
+                <label class="col-3">Nom</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="selectedColumn.name"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="field grid">
+                <label class="col-3">Dictionnaire</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <p-inputSwitch
+                            [(ngModel)]="selectedColumn.dictionary"
+                        ></p-inputSwitch>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            *ngIf="
+                selectedColumn.type == 'DATE' ||
+                selectedColumn.type == 'DATETIME'
+            "
+            class="col-12"
+        >
+            <div class="field grid">
+                <label class="col-3">Formatage</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <p-dropdown
+                            [options]="formattings"
+                            [(ngModel)]="selectedColumn.formatting"
+                            optionLabel="label"
+                            optionValue="code"
+                            placeholder="Indéfini"
+                            appendTo="body"
+                            [showClear]="true"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="displayConfigAgr" class="col-12">
+            <div class="field grid">
+                <label class="col-3">Agrégation</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <p-dropdown
+                            [options]="aggregations"
+                            [(ngModel)]="selectedColumn.aggregation"
+                            optionLabel="label"
+                            optionValue="code"
+                            placeholder="Indéfini"
+                            appendTo="body"
+                            [showClear]="true"
+                        >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="displayVal1" class="col-12">
+            <div class="field grid">
+                <label class="col-3">{{ valName1 }}</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="val1"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="displayVal2" class="col-12">
+            <div class="field grid">
+                <label class="col-3">{{ valName2 }}</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="val2"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="displayVal3" class="col-12">
+            <div class="field grid">
+                <label class="col-3">{{ valName3 }}</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="val3"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="displayVal4" class="col-12">
+            <div class="field grid">
+                <label class="col-3">{{ valName4 }}</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="val4"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="displayVal5" class="col-12">
+            <div class="field grid">
+                <label class="col-3">{{ valName5 }}</label>
+                <div class="col-9">
+                    <div class="p-fluid">
+                        <input
+                            pInputText
+                            type="text"
+                            name="name"
+                            [(ngModel)]="val5"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button
+            label="Enregistrer"
+            (click)="closeEditCol()"
+            styleClass="p-button-text"
+        >
+        </p-button>
+    </ng-template>
+</p-dialog>

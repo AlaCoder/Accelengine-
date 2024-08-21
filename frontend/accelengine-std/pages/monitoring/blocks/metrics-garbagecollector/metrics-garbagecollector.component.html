@@ -1,0 +1,160 @@
+<div class="grid">
+    <div class="col-4">
+        <div *ngIf="garbageCollectorMetrics">
+            <span>
+                GC Live/GC Max ({{
+                    garbageCollectorMetrics["jvm.gc.live.data.size"] / 1048576
+                        | number: "1.0-0"
+                }}M /
+                {{
+                    garbageCollectorMetrics["jvm.gc.max.data.size"] / 1048576
+                        | number: "1.0-0"
+                }}M)
+            </span>
+
+            <p-progressBar
+                [value]="
+                    round(
+                        (garbageCollectorMetrics['jvm.gc.live.data.size'] *
+                            100) /
+                            garbageCollectorMetrics['jvm.gc.max.data.size']
+                    )
+                "
+                class="progressbar-success"
+            >
+                <span>
+                    {{
+                        (100 *
+                            garbageCollectorMetrics["jvm.gc.live.data.size"]) /
+                            garbageCollectorMetrics["jvm.gc.max.data.size"]
+                            | number: "1.0-2"
+                    }}%
+                </span>
+            </p-progressBar>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div *ngIf="garbageCollectorMetrics">
+            <span>
+                GCM Promoted/GCM Allocated ({{
+                    garbageCollectorMetrics["jvm.gc.memory.promoted"] / 1048576
+                        | number: "1.0-0"
+                }}M /
+                {{
+                    garbageCollectorMetrics["jvm.gc.memory.allocated"] / 1048576
+                        | number: "1.0-0"
+                }}M)
+            </span>
+
+            <p-progressBar
+                [value]="
+                    round(
+                        (garbageCollectorMetrics['jvm.gc.memory.promoted'] *
+                            100) /
+                            garbageCollectorMetrics['jvm.gc.memory.allocated']
+                    )
+                "
+                class="progressbar-success"
+            >
+                <span>
+                    {{
+                        (100 *
+                            garbageCollectorMetrics["jvm.gc.memory.promoted"]) /
+                            garbageCollectorMetrics["jvm.gc.memory.allocated"]
+                            | number: "1.0-2"
+                    }}%
+                </span>
+            </p-progressBar>
+        </div>
+    </div>
+
+    <div id="garbageCollectorMetrics" class="col-4">
+        <div class="grid" *ngIf="garbageCollectorMetrics">
+            <div class="col-9">Classes loaded</div>
+            <div class="col-3 text-right">
+                {{ garbageCollectorMetrics.classesLoaded }}
+            </div>
+        </div>
+        <div class="grid" *ngIf="garbageCollectorMetrics">
+            <div class="col-9">Classes unloaded</div>
+            <div class="col-3 text-right">
+                {{ garbageCollectorMetrics.classesUnloaded }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <div
+            class="table-responsive"
+            *ngIf="!updating && garbageCollectorMetrics"
+        >
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="text-right">Count</th>
+                        <th class="text-right">Mean</th>
+                        <th class="text-right">Min</th>
+                        <th class="text-right">p50</th>
+                        <th class="text-right">p75</th>
+                        <th class="text-right">p95</th>
+                        <th class="text-right">p99</th>
+                        <th class="text-right">Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>jvm.gc.pause</td>
+                        <td class="text-right">
+                            {{ garbageCollectorMetrics["jvm.gc.pause"].count }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"].mean
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"]["0.0"]
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"]["0.5"]
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"]["0.75"]
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"]["0.95"]
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"]["0.99"]
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                garbageCollectorMetrics["jvm.gc.pause"].max
+                                    | number: "1.0-3"
+                            }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
